@@ -151,11 +151,29 @@ namespace Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to مشکلی در ثبت به وجود آمده است!!.
+        /// </summary>
+        public static string CreateError {
+            get {
+                return ResourceManager.GetString("CreateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to این روز برای آگهی شما ثبت شده است.
         /// </summary>
         public static string DaysExists {
             get {
                 return ResourceManager.GetString("DaysExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مشکلی در حذف به وجود آمده است!!.
+        /// </summary>
+        public static string DeleteError {
+            get {
+                return ResourceManager.GetString("DeleteError", resourceCulture);
             }
         }
         
@@ -435,6 +453,15 @@ namespace Common.Resources {
         public static string UnauthorizedAccessException {
             get {
                 return ResourceManager.GetString("UnauthorizedAccessException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مشکلی در بروزرسانی به وجود آمده است!!.
+        /// </summary>
+        public static string UpdateError {
+            get {
+                return ResourceManager.GetString("UpdateError", resourceCulture);
             }
         }
         

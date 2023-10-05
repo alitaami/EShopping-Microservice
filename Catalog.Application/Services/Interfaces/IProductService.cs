@@ -13,7 +13,8 @@ namespace Catalog.Application.Services.Interfaces
         public Task<ServiceResult> GetProducts();
         public Task<ServiceResult> GetProduct(string id);
         public Task<ServiceResult> GetProductByName(string name);
-        public Task<ServiceResult> GetProductByBrand(string brand);
+        public Task<ServiceResult> GetBrands();
+        public Task<ServiceResult> GetTypes();
         public Task<ServiceResult> CreateProduct(Product product);
         public Task<ServiceResult> UpdateProduct(Product product);
         public Task<ServiceResult> DeleteProduct(string id);

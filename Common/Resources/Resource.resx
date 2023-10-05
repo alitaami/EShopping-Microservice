@@ -147,8 +147,14 @@
   <data name="ConfirmVisit" xml:space="preserve">
     <value>تایید درخواست بازدید از ملک</value>
   </data>
+  <data name="CreateError" xml:space="preserve">
+    <value>مشکلی در ثبت به وجود آمده است!!</value>
+  </data>
   <data name="DaysExists" xml:space="preserve">
     <value>این روز برای آگهی شما ثبت شده است</value>
+  </data>
+  <data name="DeleteError" xml:space="preserve">
+    <value>مشکلی در حذف به وجود آمده است!!</value>
   </data>
   <data name="EmailRecordNull" xml:space="preserve">
     <value>رکوردی برای نمایش وجود ندارد</value>
@@ -242,6 +248,9 @@
   </data>
   <data name="UnauthorizedAccessException" xml:space="preserve">
     <value>دسترسی به این بخش بدون احراز هویت امکان پذیر نیست</value>
+  </data>
+  <data name="UpdateError" xml:space="preserve">
+    <value>مشکلی در بروزرسانی به وجود آمده است!!</value>
   </data>
   <data name="UserIsNotActive" xml:space="preserve">
     <value>حساب کاربری شما فعال نیست</value>
