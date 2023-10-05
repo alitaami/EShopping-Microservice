@@ -1,6 +1,6 @@
 ﻿using Catalog.Application.Services;
 using Catalog.Application.Services.Interfaces;
-using Catalog.Core.Entities.Models;
+using Catalog.Core.Entities;
 using Catalog.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
 using System.Globalization;
+using System.Reflection;
+using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 namespace WebFramework.Configuration
 {
@@ -38,7 +41,7 @@ namespace WebFramework.Configuration
                 SetupNlog(builder);
 
                 AddAppServices(builder);
-                 
+
 
                 AddMvcAndJsonOptions(builder);
 
@@ -64,21 +67,33 @@ namespace WebFramework.Configuration
         }
 
         private static void AddAppServices(WebApplicationBuilder builder)
-        { 
-            builder.Services.AddTransient(typeof(IRepository<>), typeof(MongoDbRepository<>));
-            //builder.Services.AddTransient<IProductService, ProductService>();
-            builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
+        {
+            // 1. IMongoDatabase registration
+            builder.Services.AddScoped<IMongoDatabase>(sp =>
             {
-                var connectionString = "mongodb://localhost:27017/EShopping";
-                var client = new MongoClient(connectionString);
-                return client.GetDatabase("EShopping");
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("MongoDB");
+                var databaseName = configuration["MongoDatabaseName"] ?? "Eshopping";
+
+                var mongoClient = new MongoClient(connectionString);
+                return mongoClient.GetDatabase(databaseName);
             });
 
+            // 2. MongoDbContext registration
+            builder.Services.AddScoped<MongoDbContext>();
+
+            // 4. Existing registrations
+            builder.Services.AddTransient(typeof(IRepository<>), typeof(MongoDbRepository<>));
+            builder.Services.AddTransient<IProductService, ProductService>();
+
+            // 5. Other services
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
         }
+
         //private static void ApplyRemainingMigrations(WebApplicationBuilder builder)
         //{
         //    var serviceScopeFactory = builder.Services.BuildServiceProvider().GetService<IServiceScopeFactory>();

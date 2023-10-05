@@ -1,5 +1,4 @@
 ﻿using Catalog.Core.Entities;
-using Catalog.Core.Entities.Models;
 using Catalog.Infrastructure.Data.SeedData;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -14,9 +13,9 @@ namespace Catalog.Infrastructure.Data.Context
     public class MongoDbContext
     {
         private readonly IMongoDatabase _database;
-
         public MongoDbContext(IMongoDatabase database)
         {
+            // Use the injected database instance
             _database = database;
 
             // Initialize collections

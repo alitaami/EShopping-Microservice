@@ -3,12 +3,15 @@ using MongoDB.Driver;
 
 public class MongoDbRepository<T> : IRepository<T> where T : class
 {
+     
     private readonly IMongoCollection<T> _collection;
 
-    public MongoDbRepository(IMongoDatabase database, string collectionName)
+    public MongoDbRepository(IMongoDatabase database)
     {
+        var collectionName = typeof(T).Name + "s"; // Assumes a convention like Product -> Products
         _collection = database.GetCollection<T>(collectionName);
     }
+
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
