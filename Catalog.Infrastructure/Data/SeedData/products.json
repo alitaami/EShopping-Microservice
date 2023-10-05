@@ -1,0 +1,34 @@
+[
+  {
+    "Id": "60e6564a3b9f0c0b5077b127",
+    "Name": "Smartphone Plus",
+    "Summary": "A top-notch smartphone with an impressive camera.",
+    "Description": "Smartphone Plus offers a sleek design, long battery life, and the latest mobile technology.",
+    "ImageFile": "smartphone_plus.png",
+    "Brands": {
+      "Id": "60e6564a3b9f0c0b5077b128",
+      "Name": "MobiTech"
+    },
+    "Types": {
+      "Id": "60e6564a3b9f0c0b5077b129",
+      "Name": "Mobile"
+    },
+    "Price": 800.00
+  },
+  {
+    "Id": "60e6564a3b9f0c0b5077b130",
+    "Name": "Bluetooth Headset",
+    "Summary": "Wireless Bluetooth headset with noise cancellation.",
+    "Description": "Experience crystal clear audio and a comfortable fit with the Bluetooth Headset.",
+    "ImageFile": "headset.png",
+    "Brands": {
+      "Id": "60e6564a3b9f0c0b5077b131",
+      "Name": "SoundWave"
+    },
+    "Types": {
+      "Id": "60e6564a3b9f0c0b5077b132",
+      "Name": "Accessories"
+    },
+    "Price": 50.00
+  }
+]
