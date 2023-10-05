@@ -313,6 +313,15 @@ namespace Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ارور در Mapping رخ داده است.
+        /// </summary>
+        public static string MapingError {
+            get {
+                return ResourceManager.GetString("MapingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to پرسنلی برای ارسال ایمیل وجود ندارد.
         /// </summary>
         public static string NewsReceiverError {

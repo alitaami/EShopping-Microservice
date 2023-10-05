@@ -30,7 +30,7 @@ namespace Catalog.Application.Services
             {
                 var res = _repo.AddAsync(product);
 
-                if (res.IsCanceled)
+                if (res.IsFaulted)
                     return BadRequest(ErrorCodeEnum.BadRequest, Resource.CreateError, null);///
 
                 return Ok();
@@ -50,7 +50,7 @@ namespace Catalog.Application.Services
             {
                 var res = _repo.DeleteAsync(id);
 
-                if (res.IsCanceled)
+                if (res.IsFaulted)
                     return BadRequest(ErrorCodeEnum.BadRequest, Resource.DeleteError, null);///
 
                 return Ok();
@@ -62,8 +62,7 @@ namespace Catalog.Application.Services
                 return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain, null);
             }
         }
-
-
+         
         public async Task<ServiceResult> GetProduct(string id)
         {
             try
@@ -165,7 +164,7 @@ namespace Catalog.Application.Services
             {
                 var res = _repo.UpdateAsync(product.Id, product);
 
-                if (res.IsCanceled)
+                if (res.IsFaulted)
                     return BadRequest(ErrorCodeEnum.BadRequest, Resource.DeleteError, null);///
 
                 return Ok();

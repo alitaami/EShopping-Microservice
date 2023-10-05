@@ -201,6 +201,9 @@
   <data name="IsExists" xml:space="preserve">
     <value>تکراری میباشد</value>
   </data>
+  <data name="MapingError" xml:space="preserve">
+    <value>ارور در Mapping رخ داده است</value>
+  </data>
   <data name="NewsReceiverError" xml:space="preserve">
     <value>پرسنلی برای ارسال ایمیل وجود ندارد</value>
   </data>

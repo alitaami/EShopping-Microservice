@@ -15,6 +15,9 @@ namespace Catalog.Application.MappingProfiles
         {
             CreateMap<BrandsDto, ProductBrand>().ReverseMap();
             CreateMap<ProductDto, Product>().ReverseMap();
+            CreateMap<TypesDto, ProductType>().ReverseMap();
+            CreateMap<Product, ProductCreateViewModel>().ReverseMap();
+            CreateMap<Product, ProductUpdateViewModel>().ReverseMap();
         }
     }
 }

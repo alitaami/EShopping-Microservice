@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Catalog.Core\Catalog.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Properties\Commands\" />
-  </ItemGroup>
-
 </Project>
