@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Catalog.Application.Services;
+using Catalog.Application.Services.Interfaces;
+using Catalog.Core.Entities.Models;
+using Catalog.Infrastructure.Data.Context;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -31,8 +37,8 @@ namespace WebFramework.Configuration
 
                 SetupNlog(builder);
 
-
-
+                AddAppServices(builder);
+                 
 
                 AddMvcAndJsonOptions(builder);
 
@@ -55,6 +61,23 @@ namespace WebFramework.Configuration
 
                 throw;
             }
+        }
+
+        private static void AddAppServices(WebApplicationBuilder builder)
+        { 
+            builder.Services.AddTransient(typeof(IRepository<>), typeof(MongoDbRepository<>));
+            //builder.Services.AddTransient<IProductService, ProductService>();
+            builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
+            {
+                var connectionString = "mongodb://localhost:27017/EShopping";
+                var client = new MongoClient(connectionString);
+                return client.GetDatabase("EShopping");
+            });
+
+            builder.Services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
         //private static void ApplyRemainingMigrations(WebApplicationBuilder builder)
         //{
