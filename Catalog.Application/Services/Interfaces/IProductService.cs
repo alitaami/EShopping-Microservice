@@ -1,0 +1,22 @@
+﻿using Catalog.Core.Entities;
+using Entities.Base;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Catalog.Application.Services.Interfaces
+{
+    public interface IProductService
+    {
+        public Task<ServiceResult> GetProducts();
+        public Task<ServiceResult> GetProduct(string id);
+        public Task<ServiceResult> GetProductByName(string name);
+        public Task<ServiceResult> GetProductByBrand(string brand);
+        public Task<ServiceResult> CreateProduct(Product product);
+        public Task<ServiceResult> UpdateProduct(Product product);
+        public Task<ServiceResult> DeleteProduct(string id);
+
+    }
+}
