@@ -17,6 +17,13 @@ using System.Globalization;
 using System.Reflection;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Common.Utilities;
+using Microsoft.OpenApi.Models;
+using WebFramework.Configuration.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace WebFramework.Configuration
 {
@@ -47,6 +54,12 @@ namespace WebFramework.Configuration
 
                 AddMinimalMvc(builder);
 
+                AddCustomApiVersioning(builder);
+                
+                AddSwagger(builder);
+
+                AddHealthChecks(builder);
+
                 AddCors(builder);
 
 
@@ -64,6 +77,200 @@ namespace WebFramework.Configuration
 
                 throw;
             }
+        }
+
+        public static void AddHealthChecks(WebApplicationBuilder builder)
+        {
+            var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDB");
+
+            builder.Services.AddHealthChecks()
+        .AddMongoDb(
+            mongodbConnectionString: mongoDbConnectionString,
+            name: "mongodb",
+            failureStatus: HealthStatus.Degraded
+        );
+        }
+
+        private static void AddSwagger(WebApplicationBuilder builder)
+        {
+            Assert.NotNull(builder.Services, nameof(builder.Services));
+
+            //Add services to use Example Filters in swagger
+            //services.AddSwaggerExamples();
+            //Add services and configuration to use swagger
+            builder.Services.AddSwaggerGen(options =>
+            {
+                var xmlDocPath = Path.Combine(AppContext.BaseDirectory, "MyApi.xml");
+                //show controller XML comments like summary
+                options.IncludeXmlComments(xmlDocPath, true);
+                //options.OperationFilter<FormFileSwaggerFilter>();
+                //options.EnableAnnotations();
+                options.UseInlineDefinitionsForEnums();
+                //options.DescribeAllParametersInCamelCase();
+                //options.DescribeStringEnumsInCamelCase();
+                //options.UseReferencedDefinitionsForEnums();
+                //options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                //options.IgnoreObsoleteActions();
+                //options.IgnoreObsoleteProperties();
+                //options.CustomSchemaIds(type => type.FullName);
+
+                options.SwaggerDoc("v1", new OpenApiInfo { Version = "v1", Title = "API V1" });
+                //options.SwaggerDoc("v2", new OpenApiInfo { Version = "v2", Title = "API V2" });
+
+                #region Filters
+                ////Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
+                //options.ExampleFilters();
+
+                ////Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
+                options.OperationFilter<FileUploadOperation>(); // Add this line to enable file upload
+                                                                ////Set summary of action if not already set
+                options.OperationFilter<ApplySummariesOperationFilter>();
+
+                //#region Add UnAuthorized to Response
+                ////Add 401 response and security requirements (Lock icon) to actions that need authorization
+                options.OperationFilter<UnauthorizedResponsesOperationFilter>(false, "Bearer");
+                //#endregion
+
+                #region security for swagger
+
+                //        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //        {
+                //            In = ParameterLocation.Header,
+                //            Description = "Please enter a valid token",
+                //            Name = "Authorization",
+                //            Type = SecuritySchemeType.Http,
+                //            BearerFormat = "JWT",
+                //            Scheme = "Bearer"
+                //        });
+                //        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                //{
+                //    {
+                //        new OpenApiSecurityScheme
+                //        {
+                //            Reference = new OpenApiReference
+                //            {
+                //                Type=ReferenceType.SecurityScheme,
+                //                Id="Bearer"
+                //            }
+                //        },
+                //        new string[]{}
+                //    }
+                //});
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Password = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri("https://localhost:7076/api/Account/Login"),
+                            Scopes = new Dictionary<string, string>
+            {
+                {"read", "Read access to protected resources."},
+                {"write", "Write access to protected resources."},
+            }
+                        }
+                    }
+                });
+
+                #endregion
+
+                //#region Add Jwt Authentication
+                //Add Lockout icon on top of swagger ui page to authenticate
+
+                //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                //    Name = "Authorization",
+                //    In = ParameterLocation.Header,
+                //    Type = SecuritySchemeType.Http,
+                //    Scheme = "bearer"
+                //});
+
+                ////options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                ////{
+                ////    {"Bearer", new string[] { }}
+                ////});
+                ///
+                //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Type = SecuritySchemeType.OAuth2,
+                //    Flows = new OpenApiOAuthFlows
+                //    {
+                //        Implicit = new OpenApiOAuthFlow
+                //        {
+                //            AuthorizationUrl = new Uri("https://localhost:7188/api/v1/User/login"),
+                //            Scopes = new Dictionary<string, string>
+                //    {
+                //        {"read", "Read access to protected resources."},
+                //        {"write", "Write access to protected resources."},
+                //    }
+                //        }
+                //    }
+                //});
+                #endregion
+
+                #region Versioning
+                // Remove version parameter from all Operations
+                options.OperationFilter<RemoveVersionParameters>();
+
+                ////set version "api/v{version}/[controller]" from current swagger doc verion
+                options.DocumentFilter<SetVersionInPaths>();
+
+                ////Seperate and categorize end-points by doc version
+                options.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+
+                    var versions = methodInfo.DeclaringType
+                        .GetCustomAttributes<ApiVersionAttribute>(true)
+                        .SelectMany(attr => attr.Versions);
+
+                    return versions.Any(v => $"v{v.ToString()}" == docName);
+                });
+                #endregion
+
+                //If use FluentValidation then must be use this package to show validation in swagger (MicroElements.Swashbuckle.FluentValidation)
+                //options.AddFluentValidationRules();
+
+            });
+        }
+
+
+        private static void AddCustomApiVersioning(WebApplicationBuilder builder)
+        {
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+
+                ApiVersion.TryParse("1.0", out var version10);
+                ApiVersion.TryParse("1", out var version1);
+                var a = version10 == version1; // Note: This is unused. Do you need it?
+
+                // Uncomment the version reader you wish to use. Do not set multiple, 
+                // as each one will overwrite the previous one.
+
+                // Use query string for versioning e.g., api/posts?api-version=1
+                // options.ApiVersionReader = new QueryStringApiVersionReader("api-version"); 
+
+                // Use URL segment for versioning e.g., api/v1/posts
+                // options.ApiVersionReader = new UrlSegmentApiVersionReader(); 
+
+                // Use header for versioning e.g., Header => Api-Version: 1
+                // options.ApiVersionReader = new HeaderApiVersionReader(new[] { "Api-Version" }); 
+
+                // Use MediaType for versioning (this requires more setup)
+                // options.ApiVersionReader = new MediaTypeApiVersionReader();
+
+                // Use a combination of query string and URL segment
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new QueryStringApiVersionReader("api-version"),
+                    new UrlSegmentApiVersionReader()
+                );
+            });
         }
 
         private static void AddAppServices(WebApplicationBuilder builder)

@@ -17,8 +17,8 @@ namespace Catalog.Application.Features.Properties.Commands
 {
     public class UpdateProductCommand : IRequest<ServiceResult>
     {
-        public ProductViewModel model { get; set; }
-        public UpdateProductCommand(ProductViewModel model)
+        public ProductUpdateViewModel model { get; set; }
+        public UpdateProductCommand(ProductUpdateViewModel model)
         {
             this.model = model;
         }

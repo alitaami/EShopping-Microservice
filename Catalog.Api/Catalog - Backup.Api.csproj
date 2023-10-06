@@ -7,7 +7,6 @@
     <UserSecretsId>afa23301-5789-4065-b1ae-da908e393912</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>bin\Debug\MyApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
