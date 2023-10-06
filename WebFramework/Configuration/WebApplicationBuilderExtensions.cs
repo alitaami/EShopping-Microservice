@@ -24,6 +24,8 @@ using Common.Utilities;
 using Microsoft.OpenApi.Models;
 using WebFramework.Configuration.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Catalog.Application.Features.Properties.Commands;
+using MediatR;
 
 namespace WebFramework.Configuration
 {
@@ -295,6 +297,7 @@ namespace WebFramework.Configuration
 
             // 5. Other services
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateProductCommand).GetTypeInfo().Assembly));
             builder.Services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;

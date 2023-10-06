@@ -1,5 +1,7 @@
 ﻿
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
@@ -24,7 +26,11 @@ namespace WebFramework.Configuration
                 app.UseAuthentication();
                 app.UseAuthorization();
                 app.MapControllers();
-                app.MapHealthChecks("/health");
+                app.MapHealthChecks("/health" , new HealthCheckOptions()
+                {
+                    Predicate = _ => true ,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
 
                 //app.MapHangfireDashboard("/hangfire");
                 //app.UseHangfireDashboard();
