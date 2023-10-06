@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Common.Resources;
+using Catalog.Common.Resources;
 using Entities.Base;
 
 namespace Catalog.Api.Controllers

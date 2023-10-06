@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Catalog.Application.Services.Interfaces;
+using Catalog.Common.Resources;
 using Catalog.Core.Entities.Models;
-using Common.Resources;
 using Entities.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-﻿using Common.Resources;
+﻿using Catalog.Common.Resources;
 using Entities.Base;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;

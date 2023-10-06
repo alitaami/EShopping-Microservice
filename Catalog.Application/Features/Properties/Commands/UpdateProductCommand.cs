@@ -3,7 +3,7 @@ using Catalog.Application.Features.Properties.Queries;
 using Catalog.Application.Services.Interfaces;
 using Catalog.Core.Entities;
 using Catalog.Core.Entities.Models;
-using Common.Resources;
+using Catalog.Common.Resources;
 using Entities.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;

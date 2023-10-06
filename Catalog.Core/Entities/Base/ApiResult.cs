@@ -48,7 +48,8 @@ namespace Entities.Base
         UserIsNotActive = 19,
         DuplicateKey = 20,
         DatabaseWriteError =21,
-        DatabaseConnectionError =22
+        DatabaseConnectionError =22,
+        NullField =23
     }
 
     public class FieldErrorItem

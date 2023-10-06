@@ -1,14 +1,8 @@
 ﻿using Catalog.Application.Services.Interfaces;
 using Catalog.Core.Entities;
-using Common.Resources;
+using Catalog.Common.Resources;
 using Entities.Base;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Catalog.Application.Services
 {

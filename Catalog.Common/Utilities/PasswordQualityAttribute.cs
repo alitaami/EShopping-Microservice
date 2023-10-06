@@ -1,4 +1,4 @@
-﻿using  Common.Resources;
+﻿using  Catalog.Common.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 

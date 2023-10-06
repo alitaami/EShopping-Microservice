@@ -5,12 +5,7 @@ using Catalog.Core.Entities;
 using Entities.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Resources;
+using Catalog.Common.Resources;
 
 namespace Catalog.Application.Features.Properties.Commands
 {
