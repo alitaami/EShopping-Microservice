@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  eshopping-api:
+    image: eshopping-api:latest
+    ports:
+      - "5000:80"  # Exposing the API on port 5000 of the host machine
+    environment:
+      - ConnectionStrings__MongoDB=mongodb://mongo:27017/
+      - MongoDatabaseName=CatalogDb
+      - ConnectionStrings__CollectionName=Products
+      - ConnectionStrings__BrandsCollection=ProductBrands
+      - ConnectionStrings__TypesCollection=ProductTypes
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Exposing MongoDB on port 27017 of the host machine
+    #environment:
+    #  MONGO_INITDB_ROOT_USERNAME: Ali
+    #  MONGO_INITDB_ROOT_PASSWORD: AliTaami1985
+    #  MONGO_INITDB_DATABASE: CatalogDb
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

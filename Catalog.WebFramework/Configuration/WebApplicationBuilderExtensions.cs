@@ -26,6 +26,8 @@ using WebFramework.Configuration.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Catalog.Application.Features.Properties.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace WebFramework.Configuration
 {
@@ -238,8 +240,7 @@ namespace WebFramework.Configuration
 
             });
         }
-
-
+ 
         private static void AddCustomApiVersioning(WebApplicationBuilder builder)
         {
             builder.Services.AddApiVersioning(options =>
@@ -282,7 +283,7 @@ namespace WebFramework.Configuration
             {
                 var configuration = sp.GetRequiredService<IConfiguration>();
                 var connectionString = configuration.GetConnectionString("MongoDB");
-                var databaseName = configuration["MongoDatabaseName"] ?? "Eshopping";
+                var databaseName = configuration["MongoDatabaseName"] ?? "CatalogDb";
 
                 var mongoClient = new MongoClient(connectionString);
                 return mongoClient.GetDatabase(databaseName);
@@ -298,10 +299,20 @@ namespace WebFramework.Configuration
             // 5. Other services
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateProductCommand).GetTypeInfo().Assembly));
-            builder.Services.Configure<IISServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
+
+            //builder.WebHost.ConfigureKestrel(options =>
+            //{
+            //    options.ListenAnyIP(5000); // HTTP
+            //    options.ListenAnyIP(5001, listenOptions => // HTTPS
+            //    {
+            //        listenOptions.UseHttps();
+            //    });
+            //});
+
+            //builder.Services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.AllowSynchronousIO = true;
+            //});
         }
 
         //private static void ApplyRemainingMigrations(WebApplicationBuilder builder)

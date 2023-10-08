@@ -15,9 +15,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Application", "Cata
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Infrastructure", "Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{397B905F-972F-4651-A60F-A906EAED2814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Common", "Catalog.Common\Catalog.Common.csproj", "{9F9732AE-D66F-4C45-89AA-97FFE722E928}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Common", "Catalog.Common\Catalog.Common.csproj", "{9F9732AE-D66F-4C45-89AA-97FFE722E928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.WebFramework", "Catalog.WebFramework\Catalog.WebFramework.csproj", "{0E474067-72A3-416D-BBC5-3008072E22EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.WebFramework", "Catalog.WebFramework\Catalog.WebFramework.csproj", "{0E474067-72A3-416D-BBC5-3008072E22EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker-Compose", "Docker-Compose", "{10896FF0-7302-4F15-BB7A-5C53125B7466}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
