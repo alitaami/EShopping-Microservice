@@ -21,26 +21,14 @@ namespace WebFramework.Configuration
                     app.UseDeveloperExceptionPage();
                     app.UseSwaggerAndUI();
                 }
-
-                // Middleware to redirect HTTP requests to HTTPS.
-                // Consider using this only in Production.
-                if (app.Environment.IsProduction())
-                {
-                    app.UseHsts();
-                    app.UseHttpsRedirection();
-                }
-
-                // Serving static files should be done early to avoid unnecessary processing for these requests.
-                app.UseStaticFiles();
-
-                // It's important to have Routing before Authentication and Authorization.
+                 
+                app.UseHttpsRedirection();
                 app.UseRouting();
-
-                // CORS should be configured after Routing but before UseAuthentication.
-                app.UseCors();
-
+                // app.UseCors("CorsPolicy");
                 app.UseAuthentication();
+                app.UseStaticFiles();
                 app.UseAuthorization();
+
 
                 // Endpoints mapping comes after Authentication and Authorization.
                 app.MapControllers();

@@ -4,7 +4,7 @@ services:
   eshopping-api:
     image: eshopping-api:latest
     ports:
-      - "5000:80"  # Exposing the API on port 5000 of the host machine
+      - "5000:80"
     environment:
       - ConnectionStrings__MongoDB=mongodb://mongo:27017/
       - MongoDatabaseName=CatalogDb
@@ -17,11 +17,11 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"  # Exposing MongoDB on port 27017 of the host machine
-    #environment:
-    #  MONGO_INITDB_ROOT_USERNAME: Ali
-    #  MONGO_INITDB_ROOT_PASSWORD: AliTaami1985
-    #  MONGO_INITDB_DATABASE: CatalogDb
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Ali
+      MONGO_INITDB_ROOT_PASSWORD: AliTaami1985
+      MONGO_INITDB_DATABASE: CatalogDb
     volumes:
       - mongo-data:/data/db
 

@@ -16,6 +16,7 @@ namespace Catalog.Api.Controllers
     /// 
     /// </summary>
     [ApiVersion("1")]
+    [AllowAnonymous]
     public class CatalogApiController : APIControllerBase
     {
         private readonly ILogger<CatalogApiController> _logger;
@@ -38,7 +39,6 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        [AllowAnonymous]
         public async Task<IActionResult> GetProductById(string id)
         {
             try

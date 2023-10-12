@@ -28,6 +28,14 @@ using Catalog.Application.Features.Properties.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.Graph.Models.ExternalConnectors;
+using Catalog.Application.MappingProfiles;
+using Application;
 
 namespace WebFramework.Configuration
 {
@@ -53,19 +61,19 @@ namespace WebFramework.Configuration
 
                 AddAppServices(builder);
 
+                AddHealthChecks(builder);
 
                 AddMvcAndJsonOptions(builder);
 
                 AddMinimalMvc(builder);
 
                 AddCustomApiVersioning(builder);
-                
-                AddSwagger(builder);
 
-                AddHealthChecks(builder);
+                AddSwagger(builder);
 
                 AddCors(builder);
 
+                //AddAuthentication(builder);
 
                 AddAppHsts(builder);
 
@@ -83,146 +91,142 @@ namespace WebFramework.Configuration
             }
         }
 
-        public static void AddHealthChecks(WebApplicationBuilder builder)
+        private static void AddHealthChecks(WebApplicationBuilder builder)
         {
-            var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDB");
-
             builder.Services.AddHealthChecks()
-        .AddMongoDb(
-            mongodbConnectionString: mongoDbConnectionString,
-            name: "mongodb",
-            failureStatus: HealthStatus.Degraded
-        );
-        }
-
+           .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "Catalog  Mongo Db Health Check",
+               HealthStatus.Degraded);
+        }  
         private static void AddSwagger(WebApplicationBuilder builder)
         {
             Assert.NotNull(builder.Services, nameof(builder.Services));
 
-            //Add services to use Example Filters in swagger
-            //services.AddSwaggerExamples();
-            //Add services and configuration to use swagger
+            // Add services to use Example Filters in swagger
+            // services.AddSwaggerExamples();
+            // Add services and configuration to use swagger
             builder.Services.AddSwaggerGen(options =>
             {
                 var xmlDocPath = Path.Combine(AppContext.BaseDirectory, "MyApi.xml");
-                //show controller XML comments like summary
+                // Show controller XML comments like summary
                 options.IncludeXmlComments(xmlDocPath, true);
-                //options.OperationFilter<FormFileSwaggerFilter>();
-                //options.EnableAnnotations();
+                // options.OperationFilter<FormFileSwaggerFilter>();
+                // options.EnableAnnotations();
                 options.UseInlineDefinitionsForEnums();
-                //options.DescribeAllParametersInCamelCase();
-                //options.DescribeStringEnumsInCamelCase();
-                //options.UseReferencedDefinitionsForEnums();
-                //options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                //options.IgnoreObsoleteActions();
-                //options.IgnoreObsoleteProperties();
-                //options.CustomSchemaIds(type => type.FullName);
+                // options.DescribeAllParametersInCamelCase();
+                // options.DescribeStringEnumsInCamelCase();
+                // options.UseReferencedDefinitionsForEnums();
+                // options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                // options.IgnoreObsoleteActions();
+                // options.IgnoreObsoleteProperties();
+                // options.CustomSchemaIds(type => type.FullName);
 
                 options.SwaggerDoc("v1", new OpenApiInfo { Version = "v1", Title = "API V1" });
-                //options.SwaggerDoc("v2", new OpenApiInfo { Version = "v2", Title = "API V2" });
+                // options.SwaggerDoc("v2", new OpenApiInfo { Version = "v2", Title = "API V2" });
 
                 #region Filters
-                ////Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
-                //options.ExampleFilters();
+                // Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
+                // options.ExampleFilters();
 
-                ////Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
+                // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
                 options.OperationFilter<FileUploadOperation>(); // Add this line to enable file upload
-                                                                ////Set summary of action if not already set
+                                                                // Set summary of action if not already set
                 options.OperationFilter<ApplySummariesOperationFilter>();
 
+                #endregion
+
                 //#region Add UnAuthorized to Response
-                ////Add 401 response and security requirements (Lock icon) to actions that need authorization
-                options.OperationFilter<UnauthorizedResponsesOperationFilter>(false, "Bearer");
+                //// Add 401 response and security requirements (Lock icon) to actions that need authorization
+                // options.OperationFilter<UnauthorizedResponsesOperationFilter>(false, "Bearer");
                 //#endregion
 
                 #region security for swagger
 
-                //        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //        {
-                //            In = ParameterLocation.Header,
-                //            Description = "Please enter a valid token",
-                //            Name = "Authorization",
-                //            Type = SecuritySchemeType.Http,
-                //            BearerFormat = "JWT",
-                //            Scheme = "Bearer"
-                //        });
-                //        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                //{
-                //    {
-                //        new OpenApiSecurityScheme
-                //        {
-                //            Reference = new OpenApiReference
-                //            {
-                //                Type=ReferenceType.SecurityScheme,
-                //                Id="Bearer"
-                //            }
-                //        },
-                //        new string[]{}
-                //    }
-                //});
+                // options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                // {
+                //     In = ParameterLocation.Header,
+                //     Description = "Please enter a valid token",
+                //     Name = "Authorization",
+                //     Type = SecuritySchemeType.Http,
+                //     BearerFormat = "JWT",
+                //     Scheme = "Bearer"
+                // });
+                // options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                // {
+                //     {
+                //         new OpenApiSecurityScheme
+                //         {
+                //             Reference = new OpenApiReference
+                //             {
+                //                 Type=ReferenceType.SecurityScheme,
+                //                 Id="Bearer"
+                //             }
+                //         },
+                //         new string[]{}
+                //     }
+                // });
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Password = new OpenApiOAuthFlow
-                        {
-                            TokenUrl = new Uri("https://localhost:7076/api/Account/Login"),
-                            Scopes = new Dictionary<string, string>
-            {
-                {"read", "Read access to protected resources."},
-                {"write", "Write access to protected resources."},
-            }
-                        }
-                    }
-                });
+                // options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                // {
+                //     Type = SecuritySchemeType.OAuth2,
+                //     Flows = new OpenApiOAuthFlows
+                //     {
+                //         Password = new OpenApiOAuthFlow
+                //         {
+                //             TokenUrl = new Uri("https://localhost:7076/api/Account/Login"),
+                //             Scopes = new Dictionary<string, string>
+                //         {
+                //             {"read", "Read access to protected resources."},
+                //             {"write", "Write access to protected resources."},
+                //         }
+                //         }
+                //     }
+                // });
 
                 #endregion
 
                 //#region Add Jwt Authentication
-                //Add Lockout icon on top of swagger ui page to authenticate
+                // Add Lockout icon on top of swagger ui page to authenticate
 
-                //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //{
-                //    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                //    Name = "Authorization",
-                //    In = ParameterLocation.Header,
-                //    Type = SecuritySchemeType.Http,
-                //    Scheme = "bearer"
-                //});
+                // options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                // {
+                //     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                //     Name = "Authorization",
+                //     In = ParameterLocation.Header,
+                //     Type = SecuritySchemeType.Http,
+                //     Scheme = "bearer"
+                // });
 
-                ////options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                ////{
-                ////    {"Bearer", new string[] { }}
-                ////});
-                ///
-                //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //{
-                //    Type = SecuritySchemeType.OAuth2,
-                //    Flows = new OpenApiOAuthFlows
-                //    {
-                //        Implicit = new OpenApiOAuthFlow
-                //        {
-                //            AuthorizationUrl = new Uri("https://localhost:7188/api/v1/User/login"),
-                //            Scopes = new Dictionary<string, string>
-                //    {
-                //        {"read", "Read access to protected resources."},
-                //        {"write", "Write access to protected resources."},
-                //    }
-                //        }
-                //    }
-                //});
-                #endregion
+                // options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                // {
+                //     {"Bearer", new string[] { }}
+                // });
+
+                // options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                // {
+                //     Type = SecuritySchemeType.OAuth2,
+                //     Flows = new OpenApiOAuthFlows
+                //     {
+                //         Implicit = new OpenApiOAuthFlow
+                //         {
+                //             AuthorizationUrl = new Uri("https://localhost:7188/api/v1/User/login"),
+                //             Scopes = new Dictionary<string, string>
+                //         {
+                //             {"read", "Read access to protected resources."},
+                //             {"write", "Write access to protected resources."},
+                //         }
+                //         }
+                //     }
+                // });
+
 
                 #region Versioning
                 // Remove version parameter from all Operations
                 options.OperationFilter<RemoveVersionParameters>();
 
-                ////set version "api/v{version}/[controller]" from current swagger doc verion
+                // set version "api/v{version}/[controller]" from current swagger doc version
                 options.DocumentFilter<SetVersionInPaths>();
 
-                ////Seperate and categorize end-points by doc version
+                // Separate and categorize end-points by doc version
                 options.DocInclusionPredicate((docName, apiDesc) =>
                 {
                     if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
@@ -235,12 +239,12 @@ namespace WebFramework.Configuration
                 });
                 #endregion
 
-                //If use FluentValidation then must be use this package to show validation in swagger (MicroElements.Swashbuckle.FluentValidation)
-                //options.AddFluentValidationRules();
+                // If use FluentValidation then must use this package to show validation in swagger (MicroElements.Swashbuckle.FluentValidation)
+                // options.AddFluentValidationRules();
 
             });
         }
- 
+
         private static void AddCustomApiVersioning(WebApplicationBuilder builder)
         {
             builder.Services.AddApiVersioning(options =>
@@ -278,41 +282,37 @@ namespace WebFramework.Configuration
 
         private static void AddAppServices(WebApplicationBuilder builder)
         {
-            // 1. IMongoDatabase registration
-            builder.Services.AddScoped<IMongoDatabase>(sp =>
-            {
-                var configuration = sp.GetRequiredService<IConfiguration>();
-                var connectionString = configuration.GetConnectionString("MongoDB");
-                var databaseName = configuration["MongoDatabaseName"] ?? "CatalogDb";
+            // Load the MongoDB settings from your appsettings.json or environment variables.
+            var mongoDbSettings = builder.Configuration.GetSection("DatabaseSettings");
 
-                var mongoClient = new MongoClient(connectionString);
-                return mongoClient.GetDatabase(databaseName);
+            // Register IMongoClient and IMongoDatabase as singletons to ensure a shared connection.
+            var mongoDbConnectionString = mongoDbSettings["ConnectionString"];
+            var databaseName = mongoDbSettings["DatabaseName"];
+            var mongoClient = new MongoClient(mongoDbConnectionString);
+            var mongoDatabase = mongoClient.GetDatabase(databaseName);
+
+            builder.Services.AddSingleton<IMongoClient>(mongoClient);
+            builder.Services.AddSingleton<IMongoDatabase>(mongoDatabase);
+
+            // Register MongoDbContext as a scoped service.
+            builder.Services.AddScoped(sp =>
+            {
+                // Retrieve the IMongoDatabase instance from the service provider.
+                var database = sp.GetRequiredService<IMongoDatabase>();
+                return new MongoDbContext(database);
             });
 
-            // 2. MongoDbContext registration
-            builder.Services.AddScoped<MongoDbContext>();
+            // Register IRepository<> as transient.
+            builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
-            // 4. Existing registrations
-            builder.Services.AddTransient(typeof(IRepository<>), typeof(MongoDbRepository<>));
-            builder.Services.AddTransient<IProductService, ProductService>();
+            // Register other application services.
+            builder.Services.AddApplicationServices();
 
-            // 5. Other services
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateProductCommand).GetTypeInfo().Assembly));
-
-            //builder.WebHost.ConfigureKestrel(options =>
-            //{
-            //    options.ListenAnyIP(5000); // HTTP
-            //    options.ListenAnyIP(5001, listenOptions => // HTTPS
-            //    {
-            //        listenOptions.UseHttps();
-            //    });
-            //});
-
-            //builder.Services.Configure<IISServerOptions>(options =>
-            //{
-            //    options.AllowSynchronousIO = true;
-            //});
+            // Configure IISServerOptions if needed.
+            builder.Services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         //private static void ApplyRemainingMigrations(WebApplicationBuilder builder)

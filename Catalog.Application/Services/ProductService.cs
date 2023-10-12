@@ -8,9 +8,9 @@ namespace Catalog.Application.Services
 {
     public class ProductService : ServiceBase<ProductService>, IProductService
     {
-        IRepository<Product> _repo;
-        IRepository<ProductBrand> _repoB;
-        IRepository<ProductType> _repoT;
+        private readonly  IRepository<Product> _repo;
+        private readonly IRepository<ProductBrand> _repoB;
+        private readonly IRepository<ProductType> _repoT;
         public ProductService(ILogger<ProductService> logger, IRepository<ProductBrand> repoB, IRepository<ProductType> repoT, IRepository<Product> repo) : base(logger)
         {
             _repoB = repoB;
