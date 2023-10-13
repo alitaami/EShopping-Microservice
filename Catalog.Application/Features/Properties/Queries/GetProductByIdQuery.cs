@@ -35,8 +35,11 @@ namespace Catalog.Application.Features.Properties.Queries
                 {
                     var res = await _product.GetProduct(request.Id);
 
+                    if(res.Data is null)
+                        return NotFound(ErrorCodeEnum.NotFound, Resource.NotFound, null);
+                     
                     var result = _mapper.Map<ProductDto>(res.Data);
-
+                      
                     return Ok(result);
                 }
                 catch (Exception ex)

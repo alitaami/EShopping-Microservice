@@ -3,6 +3,7 @@ using Catalog.Core.Entities;
 using Catalog.Common.Resources;
 using Entities.Base;
 using Microsoft.Extensions.Logging;
+using Catalog.Core.Entities.Models;
 
 namespace Catalog.Application.Services
 {

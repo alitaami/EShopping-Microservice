@@ -114,12 +114,12 @@ namespace Catalog.Api.Controllers
         }
 
         // Get product by name
-        [HttpGet("product")]
+        [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetProductByName([FromQuery] string name)
+        public async Task<IActionResult> GetProductByName( string name)
         { 
             try
             {
