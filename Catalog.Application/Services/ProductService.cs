@@ -11,7 +11,7 @@ namespace Catalog.Application.Services
         private readonly  IRepository<Product> _repo;
         private readonly IRepository<ProductBrand> _repoB;
         private readonly IRepository<ProductType> _repoT;
-        public ProductService(ILogger<ProductService> logger, IRepository<ProductBrand> repoB, IRepository<ProductType> repoT, IRepository<Product> repo) : base(logger)
+        public ProductService(ILogger<ProductService> logger,  IRepository<ProductBrand> repoB, IRepository<ProductType> repoT, IRepository<Product> repo) : base(logger)
         {
             _repoB = repoB;
             _repoT = repoT;

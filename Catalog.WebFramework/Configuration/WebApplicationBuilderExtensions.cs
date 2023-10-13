@@ -36,6 +36,7 @@ using System.Text;
 using Microsoft.Graph.Models.ExternalConnectors;
 using Catalog.Application.MappingProfiles;
 using Application;
+using Catalog.Core.Entities.Models;
 
 namespace WebFramework.Configuration
 {
@@ -282,26 +283,19 @@ namespace WebFramework.Configuration
 
         private static void AddAppServices(WebApplicationBuilder builder)
         {
-            // Load the MongoDB settings from your appsettings.json or environment variables.
-            var mongoDbSettings = builder.Configuration.GetSection("DatabaseSettings");
+            var configuration = builder.Configuration;
+            var settings = new DatabaseSettings();
+            configuration.GetSection("DatabaseSettings").Bind(settings);
 
-            // Register IMongoClient and IMongoDatabase as singletons to ensure a shared connection.
-            var mongoDbConnectionString = mongoDbSettings["ConnectionString"];
-            var databaseName = mongoDbSettings["DatabaseName"];
-            var mongoClient = new MongoClient(mongoDbConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(databaseName);
+            var client = new MongoClient(settings.ConnectionString);
+            var database = client.GetDatabase(settings.DatabaseName);
 
-            builder.Services.AddSingleton<IMongoClient>(mongoClient);
-            builder.Services.AddSingleton<IMongoDatabase>(mongoDatabase);
+            // Register IMongoDatabase as a singleton.
+            builder.Services.AddSingleton(database);
 
-            // Register MongoDbContext as a scoped service.
-            builder.Services.AddScoped(sp =>
-            {
-                // Retrieve the IMongoDatabase instance from the service provider.
-                var database = sp.GetRequiredService<IMongoDatabase>();
-                return new MongoDbContext(database);
-            });
-
+            // Register MongoDbContext and IRepository.
+            builder.Services.AddScoped<MongoDbContext>();
+             
             // Register IRepository<> as transient.
             builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 

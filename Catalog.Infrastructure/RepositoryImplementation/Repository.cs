@@ -1,18 +1,15 @@
-﻿using MongoDB.Bson;
+﻿using Catalog.Infrastructure.Data.Context;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-     
     private readonly IMongoCollection<T> _collection;
-    private readonly IMongoDatabase _database;
 
-    public Repository(IMongoDatabase database)
+    public Repository(MongoDbContext dbContext)
     {
-        _database = database;
-        
         var collectionName = typeof(T).Name + "s"; // Assumes a convention like Product -> Products
-        _collection = _database.GetCollection<T>(collectionName);
+        _collection = dbContext.GetCollection<T>(collectionName);
     }
 
 

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Catalog.Infrastructure.Data.SeedData
 {
-    public static class ProductContextSeed
+    public class ProductContextSeed
     {
-        public static void SeedData(IMongoCollection<Product> collection)
+        public static void SeedData(IMongoCollection<Product> collection )
         {
             bool check = collection.Find(x => true).Any();
-            string path = Path.Combine("Data", "SeedData", "products.json");
+            string path = Path.Combine(AppContext.BaseDirectory, "Data", "SeedData", "products.json");
             if (!check)
             {
                 var ProductsData = File.ReadAllText(path);
