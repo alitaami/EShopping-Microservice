@@ -91,7 +91,18 @@ namespace WebFramework.Configuration
                 throw;
             }
         }
-
+        private static void AddCors(WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+        }
         private static void AddHealthChecks(WebApplicationBuilder builder)
         {
             builder.Services.AddHealthChecks()
@@ -362,18 +373,7 @@ namespace WebFramework.Configuration
                              });
 
         }
-        private static void AddCors(WebApplicationBuilder builder)
-        {
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                });
-            });
-        }
+       
         private static void AddAppHsts(WebApplicationBuilder builder)
         {
             builder.Services.AddHsts(options =>
@@ -391,7 +391,8 @@ namespace WebFramework.Configuration
             //https://github.com/aspnet/AspNetCore/blob/0303c9e90b5b48b309a78c2ec9911db1812e6bf3/src/Mvc/Mvc/src/MvcServiceCollectionExtensions.cs
             builder.Services.AddControllers(options =>
             {
-                options.Filters.Add(new AuthorizeFilter()); //Apply AuthorizeFilter as global filter to all actions
+                //Apply AuthorizeFilter as global filter to all actions
+                //options.Filters.Add(new AuthorizeFilter()); 
 
                 //Like [ValidateAntiforgeryToken] attribute but dose not validatie for GET and HEAD http method
                 //You can ingore validate by using [IgnoreAntiforgeryToken] attribute
@@ -446,7 +447,6 @@ namespace WebFramework.Configuration
             //.SetCompatibilityVersion(CompatibilityVersion.Latest); //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
             #endregion
         }
-
 
         private static void ConfigLogging(WebApplicationBuilder builder)
         {

@@ -58,6 +58,7 @@ namespace Catalog.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllBrands()
         {
             try
@@ -182,6 +183,7 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
+
         public async Task<IActionResult> UpdateProduct([FromBody] ProductUpdateViewModel model)
         {
             try
