@@ -1,8 +1,6 @@
-﻿using Catalog.Infrastructure.Data.Context;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -10,7 +8,6 @@ using NLog;
 using NLog.Web;
 using System.Globalization;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -18,8 +15,11 @@ using Common.Utilities;
 using Microsoft.OpenApi.Models;
 using WebFramework.Configuration.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Basket.Core.Repositories;
+using Basket.Infrastructure.Repositories;
+using Basket.Application;
 using Application;
-using Catalog.Core.Entities.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace WebFramework.Configuration
 {
@@ -89,9 +89,9 @@ namespace WebFramework.Configuration
         private static void AddHealthChecks(WebApplicationBuilder builder)
         {
             builder.Services.AddHealthChecks()
-           .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "Catalog  Mongo Db Health Check",
-               HealthStatus.Degraded);
-        }  
+               .AddRedis(builder.Configuration["CacheSettings:ConnectionString"], name: "Redis Health Check", failureStatus: HealthStatus.Degraded);
+        }
+
         private static void AddSwagger(WebApplicationBuilder builder)
         {
             Assert.NotNull(builder.Services, nameof(builder.Services));
@@ -277,21 +277,14 @@ namespace WebFramework.Configuration
 
         private static void AddAppServices(WebApplicationBuilder builder)
         {
-            var configuration = builder.Configuration;
-            var settings = new DatabaseSettings();
-            configuration.GetSection("DatabaseSettings").Bind(settings);
 
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetValue<string>("CacheSettings:ConnectionString");
+            });
 
-            // Register IMongoDatabase as a singleton.
-            builder.Services.AddSingleton(database);
-
-            // Register MongoDbContext and IRepository.
-            builder.Services.AddScoped<MongoDbContext>();
-             
-            // Register IRepository<> as transient.
-            builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            // Register Repository as transient.
+            builder.Services.AddTransient<IBasketRepository, BasketRepository>();
 
             // Register other application services.
             builder.Services.AddApplicationServices();
@@ -356,7 +349,7 @@ namespace WebFramework.Configuration
                              });
 
         }
-       
+
         private static void AddAppHsts(WebApplicationBuilder builder)
         {
             builder.Services.AddHsts(options =>

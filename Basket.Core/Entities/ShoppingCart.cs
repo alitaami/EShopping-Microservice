@@ -16,7 +16,6 @@ namespace Basket.Core.Entities
             Username = username;
         }
         public string Username { get; set; }
-        
-
+        public List<ShoppingCartItem> Items { get; set; } = new List<ShoppingCartItem>();
     }
 }
