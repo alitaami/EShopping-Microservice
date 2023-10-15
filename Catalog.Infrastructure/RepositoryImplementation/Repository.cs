@@ -11,8 +11,7 @@ public class Repository<T> : IRepository<T> where T : class
         var collectionName = typeof(T).Name + "s"; // Assumes a convention like Product -> Products
         _collection = dbContext.GetCollection<T>(collectionName);
     }
-
-
+     
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         return await _collection.Find(new BsonDocument()).ToListAsync();

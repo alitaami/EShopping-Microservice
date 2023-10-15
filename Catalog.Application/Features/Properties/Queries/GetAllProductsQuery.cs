@@ -2,6 +2,7 @@
 using Catalog.Application.Services.Interfaces;
 using Catalog.Common.Resources;
 using Catalog.Core.Entities.Models;
+using Catalog.Core.Entities.Specs;
 using Entities.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -15,9 +16,11 @@ namespace Catalog.Application.Features.Properties.Queries
 {
     public class GetAllProductsQuery : IRequest<ServiceResult>
     {
-        public GetAllProductsQuery()
-        {
+        CatalogSearchParams CatalogSearchParams { get; set; }
 
+        public GetAllProductsQuery(CatalogSearchParams catalogSearch)
+        {
+            CatalogSearchParams = catalogSearch;
         }
         public class GetAllProductsQueryHandler : ServiceBase<GetAllProductsQueryHandler>, IRequestHandler<GetAllProductsQuery, ServiceResult>
         {
@@ -32,12 +35,12 @@ namespace Catalog.Application.Features.Properties.Queries
             {
                 try
                 {
-                    var res = await _product.GetProducts();
+                    var res = await _product.GetProducts(request.CatalogSearchParams);
 
                     if (res.Data is null)
                         return NotFound(ErrorCodeEnum.NotFound, Resource.NotFound, null);
 
-                    var result = _mapper.Map<IEnumerable<ProductDto>>(res.Data);
+                    var result = _mapper.Map<Pagination<ProductDto>>(res.Data);
 
                     return Ok(result);
                 }

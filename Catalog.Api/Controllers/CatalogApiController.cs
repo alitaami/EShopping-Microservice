@@ -9,6 +9,7 @@ using Catalog.Application.Features.Properties.Queries;
 using Catalog.Common.Resources;
 using Catalog.Application.Features.Properties.Commands;
 using Catalog.Core.Entities.Models;
+using Catalog.Core.Entities.Specs;
 
 namespace Catalog.Api.Controllers
 {
@@ -79,11 +80,11 @@ namespace Catalog.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery]  CatalogSearchParams catalogSearch)
         {
             try
             {
-                var result = await _sender.Send(new GetAllProductsQuery());
+                var result = await _sender.Send(new GetAllProductsQuery(catalogSearch));
 
                 return APIResponse(result);
             }

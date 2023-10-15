@@ -4,15 +4,18 @@ using Catalog.Common.Resources;
 using Entities.Base;
 using Microsoft.Extensions.Logging;
 using Catalog.Core.Entities.Models;
+using Catalog.Core.Entities.Specs;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Catalog.Application.Services
 {
     public class ProductService : ServiceBase<ProductService>, IProductService
     {
-        private readonly  IRepository<Product> _repo;
+        private readonly IRepository<Product> _repo;
         private readonly IRepository<ProductBrand> _repoB;
         private readonly IRepository<ProductType> _repoT;
-        public ProductService(ILogger<ProductService> logger,  IRepository<ProductBrand> repoB, IRepository<ProductType> repoT, IRepository<Product> repo) : base(logger)
+        public ProductService(ILogger<ProductService> logger, IRepository<ProductBrand> repoB, IRepository<ProductType> repoT, IRepository<Product> repo) : base(logger)
         {
             _repoB = repoB;
             _repoT = repoT;
@@ -57,7 +60,7 @@ namespace Catalog.Application.Services
                 return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain, null);
             }
         }
-         
+
         public async Task<ServiceResult> GetProduct(string id)
         {
             try
@@ -96,17 +99,64 @@ namespace Catalog.Application.Services
             }
         }
 
-        public async Task<ServiceResult> GetProducts()
+        public async Task<ServiceResult> GetProducts(CatalogSearchParams catalogSearchParams)
         {
             try
             {
+
                 var res = await _repo.GetAllAsync();
 
                 if (res is null)
                     return NotFound(ErrorCodeEnum.NotFound, Resource.NotFound, null);///
 
-                return Ok(res);
+                IEnumerable<Product> products = res;
+
+                if (catalogSearchParams.Search != null)
+                    products = products.Where(c => c.Name.Contains(catalogSearchParams.Search));
+
+                if (catalogSearchParams.BrandId != null)
+                    products = products.Where(c => c.Brands.Id == catalogSearchParams.BrandId);
+
+                if (catalogSearchParams.TypeId != null)
+                    products = products.Where(c => c.Types.Id == catalogSearchParams.TypeId);
+
+                IEnumerable<Product> orderedProducts;
+
+                switch (catalogSearchParams.Sort)
+                {
+                    case "priceAsc":
+                        orderedProducts = products.OrderBy(x => x.Price);
+                        break;
+
+                    case "priceDesc":
+                        orderedProducts = products.OrderByDescending(x => x.Price);
+                        break;
+
+                    default:
+                        orderedProducts = products.OrderBy(x => x.Name);
+                        break;
+                }
+
+                //Paganation
+
+                var paginatedData = orderedProducts
+                    .Skip(catalogSearchParams.PageSize * (catalogSearchParams.PageIndex - 1))
+                    .Take(catalogSearchParams.PageSize)
+                    .ToList();
+
+                int totalCount = products.Count();
+
+                var finalRes = new Pagination<Product>()
+                {
+                    PageIndex = catalogSearchParams.PageIndex,
+                    PageSize = catalogSearchParams.PageSize,
+                    Data = paginatedData,
+                    Count = totalCount
+                };
+
+                return Ok(finalRes);
             }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, null, null);
