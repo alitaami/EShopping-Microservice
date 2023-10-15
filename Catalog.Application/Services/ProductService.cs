@@ -103,7 +103,6 @@ namespace Catalog.Application.Services
         {
             try
             {
-
                 var res = await _repo.GetAllAsync();
 
                 if (res is null)
@@ -138,7 +137,6 @@ namespace Catalog.Application.Services
                 }
 
                 //Paganation
-
                 var paginatedData = orderedProducts
                     .Skip(catalogSearchParams.PageSize * (catalogSearchParams.PageIndex - 1))
                     .Take(catalogSearchParams.PageSize)
