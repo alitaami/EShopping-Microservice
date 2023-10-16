@@ -39,9 +39,9 @@ namespace Basket.Application.Features.Commands
                     if (res.Data is null)
                         return NotFound(ErrorCodeEnum.NotFound, Resource.NotFound, null);
 
-                    await _basket.DeleteBasket(request.Userame);
+                   var result = await _basket.DeleteBasket(request.Userame);
 
-                    return Ok();
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {
