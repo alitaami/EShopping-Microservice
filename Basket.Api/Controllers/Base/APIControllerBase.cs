@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Catalog.Common.Resources;
 using Entities.Base;
+using Basket.Common.Resources;
 
 namespace Catalog.Api.Controllers
 {
