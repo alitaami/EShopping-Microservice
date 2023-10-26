@@ -62,7 +62,12 @@ namespace Basket.Infrastructure.Repositories
         {
             try
             {
-                await _redis.SetStringAsync(shoppingCart.Username, JsonConvert.SerializeObject(shoppingCart));
+                var serializedData = JsonConvert.SerializeObject(shoppingCart);
+                
+                if(serializedData is null)
+                    return BadRequest(ErrorCodeEnum.BadRequest, Resource.GeneralErrorTryAgain, null);///
+
+                await _redis.SetStringAsync(shoppingCart.Username,serializedData);
 
                 return await GetBasket(shoppingCart.Username);
             }
@@ -70,7 +75,7 @@ namespace Basket.Infrastructure.Repositories
             {
                 _logger.LogError(ex, null, null);
 
-                return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain, null);
+                return InternalServerError(ErrorCodeEnum.InternalError, ex.Message, null);
             }
         }
     }

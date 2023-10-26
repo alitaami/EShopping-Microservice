@@ -1,5 +1,5 @@
-# Use the official image as a parent image
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+# Use the official Alpine-based image as a parent image
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build-env
 
 # Define build arguments and environment variables
 ARG BUILD_CONFIGURATION=Debug

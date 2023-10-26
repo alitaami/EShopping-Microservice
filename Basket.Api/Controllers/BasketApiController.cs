@@ -52,7 +52,7 @@ namespace Basket.Api.Controllers
         {
             try
             {
-                var result = await _sender.Send(model);
+                var result = await _sender.Send(new CreateShoppingCartCommand(model.UserName,model.Items));
 
                 return APIResponse(result);
             }

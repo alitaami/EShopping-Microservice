@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
-
   eshopping-api:
+    build:
+      context: ./path_to_eshopping_api_directory
+      dockerfile: Dockerfile
     image: eshopping-api:latest
     ports:
       - "5000:80"
@@ -16,27 +18,35 @@ services:
       - mongo
 
   basket-api:
+    build:
+      context: ./path_to_basket_api_directory
+      dockerfile: Dockerfile
     image: basket-api:latest
     ports:
       - "5001:80"
     environment:
-      - CacheSettings__ConnectionString=redis:6379
+      - CacheSettings__ConnectionString=redis:6379,password=Ali1234567,abortConnect=false
     depends_on:
       - redis
 
   mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+    image: mongo:5.0.3-focal
     environment:
       MONGO_INITDB_DATABASE: ProductDb
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    restart: always
 
   redis:
-    image: redis:latest
+    image: redis:alpine
+    container_name: redis
+    command: ["redis-server", "--requirepass", "Ali1234567"]
     ports:
-      - "6379:6379"    
+      - "6379:6379"
+    restart: always
 
 volumes:
   mongo-data:
+  redis-data:
