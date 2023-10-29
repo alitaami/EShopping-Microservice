@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Catalog.WebFramework": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54211;http://localhost:54212"
+    }
+  }
+}
