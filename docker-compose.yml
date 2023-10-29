@@ -29,6 +29,17 @@ services:
     depends_on:
       - redis
 
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+      - "8000:8000" # For the agent communication
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
   mongo:
     image: mongo:5.0.3-focal
     environment:
@@ -50,3 +61,4 @@ services:
 volumes:
   mongo-data:
   redis-data:
+  portainer_data: {}

@@ -26,17 +26,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker-Compose", "Docker-Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{9A187B63-C5F6-448B-86EA-50C2A1346299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Api", "Basket.Api\Basket.Api.csproj", "{E086DB65-FF8A-40FA-8918-A6011CD2A327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Api", "Basket.Api\Basket.Api.csproj", "{E086DB65-FF8A-40FA-8918-A6011CD2A327}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Application", "Basket.Application\Basket.Application.csproj", "{40DBBD97-B987-45B9-A195-F471AAE7C42F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Application", "Basket.Application\Basket.Application.csproj", "{40DBBD97-B987-45B9-A195-F471AAE7C42F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Core", "Basket.Core\Basket.Core.csproj", "{D99220A7-3789-44D9-85EF-25E32AFFADB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Core", "Basket.Core\Basket.Core.csproj", "{D99220A7-3789-44D9-85EF-25E32AFFADB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Common", "Basket.Common\Basket.Common.csproj", "{2945045A-582D-4518-A4C6-476B4D5BD898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Common", "Basket.Common\Basket.Common.csproj", "{2945045A-582D-4518-A4C6-476B4D5BD898}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Infrastructure", "Basket.Infrastructure\Basket.Infrastructure.csproj", "{860A366E-BCEC-4BE8-B7E4-837FD7773F05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Infrastructure", "Basket.Infrastructure\Basket.Infrastructure.csproj", "{860A366E-BCEC-4BE8-B7E4-837FD7773F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.WebFramework", "Basket.WebFramework\Basket.WebFramework.csproj", "{2C7F89FE-7887-487B-A329-FCEDF7AF7583}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.WebFramework", "Basket.WebFramework\Basket.WebFramework.csproj", "{2C7F89FE-7887-487B-A329-FCEDF7AF7583}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discount", "Discount", "{661884A3-F97D-45AA-A435-D92F11F615A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Api", "Discount.Api\Discount.Api.csproj", "{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +96,10 @@ Global
 		{2C7F89FE-7887-487B-A329-FCEDF7AF7583}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C7F89FE-7887-487B-A329-FCEDF7AF7583}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C7F89FE-7887-487B-A329-FCEDF7AF7583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +119,8 @@ Global
 		{2945045A-582D-4518-A4C6-476B4D5BD898} = {9A187B63-C5F6-448B-86EA-50C2A1346299}
 		{860A366E-BCEC-4BE8-B7E4-837FD7773F05} = {9A187B63-C5F6-448B-86EA-50C2A1346299}
 		{2C7F89FE-7887-487B-A329-FCEDF7AF7583} = {9A187B63-C5F6-448B-86EA-50C2A1346299}
+		{661884A3-F97D-45AA-A435-D92F11F615A8} = {BC7BF5A1-F20C-4B2D-9504-28F0D62B7AD1}
+		{A16806A2-DC49-4B59-8D2D-726E40BD4BB3} = {661884A3-F97D-45AA-A435-D92F11F615A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF00F133-AB2B-4832-A0CF-5F41AEFB63C9}

@@ -28,7 +28,7 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetProductById(string username)
+        public async Task<IActionResult> GetGetBasketByUsername(string username)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> DeleteProduct(string username)
+        public async Task<IActionResult> DeleteBasket(string username)
         {
             try
             {
