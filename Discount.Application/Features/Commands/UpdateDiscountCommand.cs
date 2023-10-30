@@ -37,7 +37,7 @@ namespace Discount.Application.Features.Commands
                 {
                     var coupon = _mapper.Map<Coupon>(request.model);
 
-                    await _discount.CreateDiscount(coupon);
+                    await _discount.UpdateDiscount(coupon);
 
                     var result = _mapper.Map<CouponModel>(coupon);
 
