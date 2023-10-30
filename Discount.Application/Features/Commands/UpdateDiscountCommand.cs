@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Discount.Common.Resources;
 using Discount.Core.Entities;
 using Discount.Core.ViewModels;
 using Discount.Grpc.Protos;
@@ -13,16 +12,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Discount.Application.Features.Commands
-{ 
-    public class CreateDiscountCommand : IRequest<ServiceResult>
+{
+    
+    public class UpdateDiscountCommand : IRequest<ServiceResult>
     {
-        public CouponViewModel model;
+        public CouponUpdateViewModel model;
 
-        public CreateDiscountCommand(CouponViewModel model)
+        public UpdateDiscountCommand(CouponUpdateViewModel model)
         {
             this.model = model;
         }
-        public class UpdateDiscountCommandHandler : ServiceBase<UpdateDiscountCommandHandler>, IRequestHandler<CreateDiscountCommand, ServiceResult>
+        public class UpdateDiscountCommandHandler : ServiceBase<UpdateDiscountCommandHandler>, IRequestHandler<UpdateDiscountCommand, ServiceResult>
         {
             private readonly IDiscountRepository _discount;
             private readonly IMapper _mapper;
@@ -31,14 +31,14 @@ namespace Discount.Application.Features.Commands
                 _mapper = mapper;
                 _discount = discount;
             }
-            public async Task<ServiceResult> Handle(CreateDiscountCommand request, CancellationToken cancellationToken)
+            public async Task<ServiceResult> Handle(UpdateDiscountCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
                     var coupon = _mapper.Map<Coupon>(request.model);
 
                     await _discount.CreateDiscount(coupon);
-  
+
                     var result = _mapper.Map<CouponModel>(coupon);
 
                     return Ok(result);
@@ -51,4 +51,5 @@ namespace Discount.Application.Features.Commands
             }
         }
     }
+
 }

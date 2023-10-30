@@ -16,6 +16,7 @@ namespace Discount.Application.MappingProfile
         {
             CreateMap<Coupon, CouponModel>().ReverseMap();
             CreateMap<Coupon, CouponViewModel>().ReverseMap();
+            CreateMap<Coupon, CouponUpdateViewModel>().ReverseMap();
         }
     }
 }
