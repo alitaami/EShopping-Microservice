@@ -1,29 +1,29 @@
-﻿using Catalog.Common.Resources;
+﻿using Discount.Common.Resources;
 using Entities.Base;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
+using Npgsql; // Add this for PostgreSQL support
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 
 public class ServiceBase<Tclass>
 {
     protected readonly ILogger<Tclass> _logger;
-    public ServiceBase(
-       ILogger<Tclass> logger)
+
+    public ServiceBase(ILogger<Tclass> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
+
     protected virtual ServiceResult HandleException(Exception ex)
     {
         try
         {
-            if (ex is MongoWriteException mongoWriteEx)
+            if (ex is PostgresException pgEx) // Handle PostgreSQL-specific exceptions
             {
-                return HandleMongoWriteException(mongoWriteEx);
-            }
-            else if (ex is MongoConnectionException mongoConnectionEx)
-            {
-                return HandleMongoConnectionException(mongoConnectionEx);
+                return HandlePostgresException(pgEx);
             }
             else if (ex is APIException napEx)
             {
@@ -37,8 +37,7 @@ public class ServiceBase<Tclass>
         catch (Exception generalEx)
         {
             _logger.LogError(generalEx, null);
-
-            throw; //Todo : درسته ایا یا باید همینجا هندل بشه
+            throw;
         }
     }
 
@@ -71,6 +70,7 @@ public class ServiceBase<Tclass>
     {
         return new ServiceResult(null, new ApiResult(HttpStatusCode.InternalServerError, errorCode, errorMessage, errors));
     }
+
     protected virtual void ValidateModel(object model)
     {
         if (model is null)
@@ -81,11 +81,10 @@ public class ServiceBase<Tclass>
             throw new APIException(HttpStatusCode.BadRequest, Resource.EnterParametersCorrectlyAndCompletely, validationResults.AsReadOnly());
     }
 
-
-    protected virtual ServiceResult HandleMongoWriteException(MongoWriteException ex)
+    protected virtual ServiceResult HandlePostgresException(PostgresException pgEx)
     {
-        // Handle duplicate key error
-        if (ex.WriteError?.Category == ServerErrorCategory.DuplicateKey)
+        // Handle specific PostgreSQL errors. For example, unique constraint violations.
+        if (pgEx.SqlState == "23505") // Unique constraint violation
         {
             return new ServiceResult(
                 null,
@@ -93,7 +92,7 @@ public class ServiceBase<Tclass>
                     HttpStatusCode.BadRequest,
                     ErrorCodeEnum.DuplicateKey,
                     "Duplicate entry detected.",
-                    null // No field-specific errors in this case
+                    null
                 )
             );
         }
@@ -105,23 +104,10 @@ public class ServiceBase<Tclass>
                     HttpStatusCode.InternalServerError,
                     ErrorCodeEnum.DatabaseWriteError,
                     "An error occurred while writing to the database.",
-                    null // No field-specific errors in this case
+                    null
                 )
             );
         }
-    }
-
-    protected virtual ServiceResult HandleMongoConnectionException(MongoConnectionException ex)
-    {
-        return new ServiceResult(
-            null,
-            new ApiResult(
-                HttpStatusCode.InternalServerError,
-                ErrorCodeEnum.DatabaseConnectionError,
-                "Failed to connect to the database. Please try again later.",
-                null // No field-specific errors in this case
-            )
-        );
     }
 
     private ServiceResult HandleAPIException(APIException napEx)
@@ -142,4 +128,3 @@ public class ServiceBase<Tclass>
         return BadRequest(ErrorCodeEnum.None, "خطای اعتبارسنجی فیلدها", validationResults);
     }
 }
-
