@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Discount.Webframework\Discount.Webframework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
