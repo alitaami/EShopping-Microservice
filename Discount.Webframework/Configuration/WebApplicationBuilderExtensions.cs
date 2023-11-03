@@ -40,7 +40,7 @@ namespace WebFramework.Configuration
 
                 AddAppServices(builder);
 
-                //AddHealthChecks(builder);
+                AddHealthChecks(builder);
 
                 AddMvcAndJsonOptions(builder);
 
@@ -81,11 +81,11 @@ namespace WebFramework.Configuration
                 });
             });
         }
-        //private static void AddHealthChecks(WebApplicationBuilder builder)
-        //{
-        //    builder.Services.AddHealthChecks()
-        //       .AddRedis(builder.Configuration["CacheSettings:ConnectionString"], name: "Redis Health Check", failureStatus: HealthStatus.Degraded);
-        //}
+        private static void AddHealthChecks(WebApplicationBuilder builder)
+        {
+            builder.Services.AddHealthChecks()
+                .AddNpgSql(builder.Configuration["DatabaseSettings:ConnectionString"], name: "PostgreSQL Health Check");
+        } 
 
         private static void AddSwagger(WebApplicationBuilder builder)
         {

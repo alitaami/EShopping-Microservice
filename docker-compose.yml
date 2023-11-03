@@ -3,8 +3,7 @@ version: '3.8'
 services:
   eshopping-api:
     build:
-      context: ./path_to_eshopping_api_directory
-      dockerfile: Dockerfile
+      context: ./Catalog.Api
     image: eshopping-api:latest
     ports:
       - "5000:80"
@@ -19,8 +18,7 @@ services:
 
   basket-api:
     build:
-      context: ./path_to_basket_api_directory
-      dockerfile: Dockerfile
+      context: ./Basket.Api 
     image: basket-api:latest
     ports:
       - "5001:80"
@@ -28,6 +26,18 @@ services:
       - CacheSettings__ConnectionString=redis:6379,password=Ali1234567,abortConnect=false
     depends_on:
       - redis
+
+  discount-api:
+     build:
+      context: ./Discount.Api
+     image: discount-api:latest
+     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings__ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=Password@1;"          
+     depends_on:
+      - discountdb
+     ports:
+      - "5002:80"
 
   portainer:
     image: portainer/portainer-ce
@@ -43,7 +53,8 @@ services:
   mongo:
     image: mongo:5.0.3-focal
     environment:
-      MONGO_INITDB_DATABASE: ProductDb
+      - MONGO_INITDB_DATABASE=ProductDb # No spaces around the equals sign
+
     ports:
       - "27017:27017"
     volumes:
@@ -58,7 +69,34 @@ services:
       - "6379:6379"
     restart: always
 
+  discountdb:
+    image: postgres:alpine
+    container_name: discountdb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Password@1
+      - POSTGRES_DB=DiscountDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@eShopping.net
+      - PGADMIN_DEFAULT_PASSWORD=Password@1
+    restart: always
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+
 volumes:
   mongo-data:
   redis-data:
   portainer_data: {}
+  postgres_data:
+  pgadmin_data:
