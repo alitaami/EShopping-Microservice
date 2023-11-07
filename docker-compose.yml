@@ -3,7 +3,7 @@ version: '3.8'
 services:
   eshopping-api:
     build:
-      context: ./Catalog.Api
+      context: . 
     image: eshopping-api:latest
     ports:
       - "5000:80"
@@ -18,7 +18,7 @@ services:
 
   basket-api:
     build:
-      context: ./Basket.Api 
+      context: .
     image: basket-api:latest
     ports:
       - "5001:80"
@@ -29,7 +29,7 @@ services:
 
   discount-api:
      build:
-      context: ./Discount.Api
+      context: .
      image: discount-api:latest
      environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -70,7 +70,7 @@ services:
     restart: always
 
   discountdb:
-    image: postgres:alpine
+    image: postgres:latest
     container_name: discountdb
     environment:
       - POSTGRES_USER=admin
