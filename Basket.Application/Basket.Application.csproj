@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Basket.Core\Basket.Core.csproj" />
-		<ProjectReference Include="..\Discount.Application\Discount.Application.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

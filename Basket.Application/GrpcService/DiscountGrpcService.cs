@@ -14,10 +14,17 @@ namespace Basket.Application.GrpcService
 
         public DiscountGrpcService(DiscountProtoService.DiscountProtoServiceClient discountProtoServiceClient)
         {
-            _discountProtoServiceClient = discountProtoServiceClient ?? throw new ArgumentNullException(nameof(discountProtoServiceClient));
+            _discountProtoServiceClient = discountProtoServiceClient;
         }
 
-        // Your methods here
-    }
+        public async Task<CouponModel> GetDiscount(string productName)
+        {
+            var discountRequest = new GetDiscountRequest
+            {
+                ProductName = productName
+            };
 
+            return await _discountProtoServiceClient.GetDiscountAsync(discountRequest);
+        }
+    }
 }
