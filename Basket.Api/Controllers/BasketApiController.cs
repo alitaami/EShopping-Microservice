@@ -8,6 +8,7 @@ using Entities.Base;
 using Basket.Application.Features.Queries;
 using Basket.Common.Resources;
 using Basket.Application.Features.Commands;
+using Basket.Application.GrpcService;
 
 namespace Basket.Api.Controllers
 {
@@ -17,8 +18,10 @@ namespace Basket.Api.Controllers
     {
         private readonly ILogger<BasketApiController> _logger;
         private ISender _sender;
-        public BasketApiController(ILogger<BasketApiController> logger, ISender sender)
+        private DiscountGrpcService _discountGrpcService;
+        public BasketApiController(DiscountGrpcService discountGrpcService, ILogger<BasketApiController> logger, ISender sender)
         {
+            _discountGrpcService = discountGrpcService;
             _logger = logger;
             _sender = sender;
         }
@@ -52,7 +55,14 @@ namespace Basket.Api.Controllers
         {
             try
             {
-                var result = await _sender.Send(new CreateShoppingCartCommand(model.UserName,model.Items));
+                foreach (var item in model.Items)
+                {
+                    var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+
+                    if (coupon.Amount != 0)
+                        item.Price -= coupon.Amount;
+                }
+                var result = await _sender.Send(new CreateShoppingCartCommand(model.UserName, model.Items));
 
                 return APIResponse(result);
             }
