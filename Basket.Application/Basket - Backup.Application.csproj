@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -22,10 +22,10 @@
 		<PackageReference Include="MediatR" Version="12.1.1" />
 	</ItemGroup>
 
-    <ItemGroup>
-        <Protobuf Include="..\Discount.Application\Protos\discount.proto" GrpcServices="Client">
-            <Link>Protos\discount.proto</Link>
-        </Protobuf>
-    </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="..\..\Discount\Discount.Application\Protos\discount.proto" GrpcServices="Client">
+			<Link>Protos\discount.proto</Link>
+		</Protobuf>
+	</ItemGroup>
 
 </Project>
