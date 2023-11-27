@@ -33,8 +33,7 @@ public class Program
             // Ensure to flush and stop internal timers/threads before application exit (Avoid segmentation fault on Linux)
             NLog.LogManager.Shutdown();
         }
-    }
-
+    } 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>

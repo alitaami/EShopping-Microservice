@@ -69,7 +69,7 @@ namespace Basket.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, null, null);
-                return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain);
+                return InternalServerError(ErrorCodeEnum.InternalError, ex.Message);
             }
         }
 

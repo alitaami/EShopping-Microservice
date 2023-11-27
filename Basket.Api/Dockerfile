@@ -1,38 +1,28 @@
-# Use the official Alpine-based image as a parent image
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build-env
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Define build arguments and environment variables
-ARG BUILD_CONFIGURATION=Debug
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV DOTNET_USE_POLLING_FILE_WATCHER=true
-ENV ASPNETCORE_URLS=http://+:80
-
-# Expose port 80 for the application to listen on
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
-# Set the working directory to /src
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-
-COPY Basket.Api/Basket.Api.csproj Basket.Api/
-COPY Basket.WebFramework/Basket.WebFramework.csproj Basket.WebFramework/
-COPY Basket.Infrastructure/Basket.Infrastructure.csproj Basket.Infrastructure/
-COPY Basket.Application/Basket.Application.csproj Basket.Application/
-COPY Basket.Core/Basket.Core.csproj Basket.Core/
-COPY Basket.Common/Basket.Common.csproj Basket.Common/
-
-# Run dotnet restore for each project
+COPY ["Basket.Api/NuGet.config", "Basket.Api/"]
+COPY ["Basket.Api/Basket.Api.csproj", "Basket.Api/"]
+COPY ["Basket.WebFramework/Basket.WebFramework.csproj", "Basket.WebFramework/"]
+COPY ["Basket.Infrastructure/Basket.Infrastructure.csproj", "Basket.Infrastructure/"]
+COPY ["Basket.Application/Basket.Application.csproj", "Basket.Application/"]
+COPY ["Basket.Core/Basket.Core.csproj", "Basket.Core/"]
+COPY ["Basket.Common/Basket.Common.csproj", "Basket.Common/"]
 RUN dotnet restore "Basket.Api/Basket.Api.csproj"
-RUN dotnet restore "Basket.WebFramework/Basket.WebFramework.csproj"
-RUN dotnet restore "Basket.Infrastructure/Basket.Infrastructure.csproj"
-RUN dotnet restore "Basket.Application/Basket.Application.csproj"
-RUN dotnet restore "Basket.Core/Basket.Core.csproj"
-RUN dotnet restore "Basket.Common/Basket.Common.csproj"
-
-# Copy the rest of the application source code
 COPY . .
-
 WORKDIR "/src/Basket.Api"
 RUN dotnet build "Basket.Api.csproj" -c Release -o /app/build
 
-ENTRYPOINT ["dotnet", "/app/build/Basket.Api.dll"]
-CMD ["--server.urls", "http://0.0.0.0:80"]
+FROM build AS publish
+RUN dotnet publish "Basket.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Basket.Api.dll"]

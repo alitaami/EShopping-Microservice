@@ -85,7 +85,7 @@ namespace WebFramework.Configuration
         {
             builder.Services.AddHealthChecks()
                 .AddNpgSql(builder.Configuration["DatabaseSettings:ConnectionString"], name: "PostgreSQL Health Check");
-        } 
+        }
 
         private static void AddSwagger(WebApplicationBuilder builder)
         {
@@ -273,12 +273,12 @@ namespace WebFramework.Configuration
         private static void AddAppServices(WebApplicationBuilder builder)
         {
 
-            // Register Repository as transient.
-            builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
-
             // Register other application services.
             builder.Services.AddApplicationServices();
 
+            // Register Repository as transient.
+            builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
+             
             // Configure IISServerOptions if needed.
             builder.Services.Configure<IISServerOptions>(options =>
             {

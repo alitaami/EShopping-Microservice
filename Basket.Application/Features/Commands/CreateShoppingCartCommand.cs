@@ -45,10 +45,7 @@ namespace Basket.Application.Features.Commands
                         Username = request.UserName,
                         Items = request.Items
                     });
-
-                    if (res.Result.Errors.Count()>0)
-                        return BadRequest(ErrorCodeEnum.BadRequest, Resource.GeneralErrorTryAgain, null);
-
+                     
                     var result = _mapper.Map<ShoppingCartDto>(res.Data);
 
                     return Ok(result);

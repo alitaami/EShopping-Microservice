@@ -10,8 +10,10 @@ namespace Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly())
                     .AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()))
-                    .AddGrpc();
-
+                    .AddGrpc(options =>
+                    {
+                        options.EnableDetailedErrors = true;
+                    });
         }
     }
 }

@@ -21,8 +21,11 @@ namespace WebFramework.Configuration
                     app.UseDeveloperExceptionPage();
                     app.UseSwaggerAndUI();
                 }
-                 
-                app.UseHttpsRedirection();
+                else
+                {
+                    // Use HTTPS Redirection in non-development environments
+                    app.UseHttpsRedirection();
+                }
                 app.UseRouting();
                 app.UseCors();
                 //app.UseAuthentication();
