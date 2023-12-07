@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Order.Core.Repositories
 {
-    public interface IOrderRepository : IAsyncRepository<Order.Core.Entities.Order>
+    public interface IOrderRepository
     {
         Task<ServiceResult> GetOrdersByUserName(string userName);
     }

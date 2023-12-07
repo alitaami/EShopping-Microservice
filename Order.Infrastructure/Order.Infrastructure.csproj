@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Order.Application\Order.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>

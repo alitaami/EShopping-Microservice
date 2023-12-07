@@ -1,12 +1,11 @@
-﻿
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Entities.Base;
-using Microsoft.IdentityModel.Tokens;
 using Order.Common.Resources;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EstateAgentApi.Services.Base
 {
