@@ -1,5 +1,7 @@
-﻿using Order.Core.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Order.Core.Common;
 using Order.Core.Repositories;
+using Order.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,34 +13,44 @@ namespace Order.Infrastructure.Repositories
 {
     public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
     {
-        public Task<T> AddAsync(T entity)
+        protected readonly OrderContext _dbContext;
+
+        public RepositoryBase(OrderContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+        public async Task<IReadOnlyList<T>> GetAllAsync()
+        {
+            return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public Task DeleteAsync(T entity)
+        public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<T>().Where(predicate).ToListAsync();
         }
 
-        public Task<IReadOnlyList<T>> GetAllAsync()
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Add(entity);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+            return entity;
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
         }
 
-        public Task UpdateAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
         }
     }
 }
