@@ -1,5 +1,5 @@
 version: '3.8'
-
+ 
 services:
   catalog-api:
     build:
@@ -15,6 +15,8 @@ services:
       - ConnectionStrings__TypesCollection=ProductTypes
     depends_on:
       - mongo
+    networks:
+      - eshopping-external-network
 
   basket-api:
     build:
@@ -24,20 +26,25 @@ services:
       - "5001:80"
     environment:
       - CacheSettings__ConnectionString=redis:6379,password=Ali1234567,abortConnect=false
-    depends_on:
+      - GrpcSettings__DiscountUrl=http://discount-api:5002
+    #depends_on:
       - redis
+    networks:
+      - eshopping-external-network
 
   discount-api:
-     build:
+    build:
       context: .
-     image: discount-api:latest
-     environment:
+    image: discount-api:latest
+    environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings__ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=Password@1;"          
-     depends_on:
+    depends_on:
       - discountdb
-     ports:
+    ports:
       - "5002:80"
+    networks:
+      - eshopping-external-network
 
   portainer:
     image: portainer/portainer-ce
@@ -49,17 +56,20 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    networks:
+      - eshopping-external-network
 
   mongo:
     image: mongo:5.0.3-focal
     environment:
       - MONGO_INITDB_DATABASE=ProductDb # No spaces around the equals sign
-
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     restart: always
+    networks:
+      - eshopping-external-network
 
   redis:
     image: redis:alpine
@@ -68,6 +78,8 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    networks:
+      - eshopping-external-network
 
   discountdb:
     image: postgres:latest
@@ -81,7 +93,9 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      
+    networks:
+      - eshopping-external-network
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -93,6 +107,12 @@ services:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/.pgadmin
+    networks:
+      - eshopping-external-network
+
+networks:
+  eshopping-external-network:
+    external: true
 
 volumes:
   mongo-data:

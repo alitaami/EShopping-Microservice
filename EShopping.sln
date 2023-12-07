@@ -40,17 +40,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.WebFramework", "Bask
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discount", "Discount", "{661884A3-F97D-45AA-A435-D92F11F615A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Api", "Discount.Api\Discount.Api.csproj", "{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Api", "Discount.Api\Discount.Api.csproj", "{A16806A2-DC49-4B59-8D2D-726E40BD4BB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Core", "Discount.Core\Discount.Core.csproj", "{9EAADF7E-FD07-4411-A34C-00FFE36902BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Core", "Discount.Core\Discount.Core.csproj", "{9EAADF7E-FD07-4411-A34C-00FFE36902BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Application", "Discount.Application\Discount.Application.csproj", "{69FA0A8D-6553-4E36-9CE6-096863B51A76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Application", "Discount.Application\Discount.Application.csproj", "{69FA0A8D-6553-4E36-9CE6-096863B51A76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Infrastructure", "Discount.Infrastructure\Discount.Infrastructure.csproj", "{71723A1D-8C69-444F-8FB4-2B157ADF467E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Infrastructure", "Discount.Infrastructure\Discount.Infrastructure.csproj", "{71723A1D-8C69-444F-8FB4-2B157ADF467E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Common", "Discount.Common\Discount.Common.csproj", "{BB1B93EE-D9C9-4713-A013-37B982F5799C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Common", "Discount.Common\Discount.Common.csproj", "{BB1B93EE-D9C9-4713-A013-37B982F5799C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Webframework", "Discount.Webframework\Discount.Webframework.csproj", "{ACB9A814-09DF-4A9D-9C08-387762160B81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Webframework", "Discount.Webframework\Discount.Webframework.csproj", "{ACB9A814-09DF-4A9D-9C08-387762160B81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Order", "Order", "{CAEF185C-81D1-4092-B1EE-74006D17E5C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Api", "Order.Api\Order.Api.csproj", "{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +134,10 @@ Global
 		{ACB9A814-09DF-4A9D-9C08-387762160B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACB9A814-09DF-4A9D-9C08-387762160B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACB9A814-09DF-4A9D-9C08-387762160B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +164,8 @@ Global
 		{71723A1D-8C69-444F-8FB4-2B157ADF467E} = {661884A3-F97D-45AA-A435-D92F11F615A8}
 		{BB1B93EE-D9C9-4713-A013-37B982F5799C} = {661884A3-F97D-45AA-A435-D92F11F615A8}
 		{ACB9A814-09DF-4A9D-9C08-387762160B81} = {661884A3-F97D-45AA-A435-D92F11F615A8}
+		{CAEF185C-81D1-4092-B1EE-74006D17E5C5} = {BC7BF5A1-F20C-4B2D-9504-28F0D62B7AD1}
+		{57ECB238-93D7-4FDC-8E56-BBFFE156EDB8} = {CAEF185C-81D1-4092-B1EE-74006D17E5C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF00F133-AB2B-4832-A0CF-5F41AEFB63C9}
