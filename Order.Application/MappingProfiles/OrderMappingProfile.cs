@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Entities.Base;
 using Order.Application.Responses;
+using Order.Application.ViewModels;
 using Order.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,9 @@ namespace Basket.Application.MappingProfiles
         public OrderMappingProfile()
         {
             CreateMap<Order.Core.Entities.Order, OrderDto>().ReverseMap();
+            CreateMap<Order.Core.Entities.Order, CheckoutOrderViewModel>().ReverseMap();
+            CreateMap<Order.Core.Entities.Order, UpdateOrderViewModel>().ReverseMap();
+            CreateMap<int, ServiceResult>().ReverseMap();
         }
     }
 }

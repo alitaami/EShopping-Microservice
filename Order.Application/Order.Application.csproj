@@ -31,7 +31,6 @@
 	<ItemGroup>
 		<Folder Include="Extensions\" />
 		<Folder Include="Features\Behavior\" />
-		<Folder Include="Features\Commands\" />
 		<Folder Include="Validators\" />
 	</ItemGroup>
 
