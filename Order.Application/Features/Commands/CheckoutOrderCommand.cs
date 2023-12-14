@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Features.Behavior.Contracts;
+using AutoMapper;
 using Entities.Base;
 using EstateAgentApi.Services.Base;
 using MediatR;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Order.Application.Features.Commands
 { 
-    public class CheckoutOrderCommand : IRequest<ServiceResult>
+    public class CheckoutOrderCommand : IRequest<ServiceResult> , IValidatable
     {
         public CheckoutOrderViewModel model { get; set; }
         public CheckoutOrderCommand(CheckoutOrderViewModel Model)

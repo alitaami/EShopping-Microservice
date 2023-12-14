@@ -27,9 +27,8 @@ namespace Order.Infrastructure.Repositories
                 return Ok(orders); // Assuming Ok is a method in your base class to create a successful result
             }
             catch (Exception ex)
-            {
-                _logger.LogError(ex, null, null);
-                return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain, null);
+            { 
+               return HandleException(ex);
             }
         }
     }

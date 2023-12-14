@@ -38,7 +38,7 @@ namespace EstateAgentApi.Services.Base
             {
                 _logger.LogError(generalEx, null);
 
-                throw; //Todo : درسته ایا یا باید همینجا هندل بشه
+                return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain, null);
             }
         }
 

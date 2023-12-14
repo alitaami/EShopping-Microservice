@@ -63,6 +63,11 @@ namespace Entities.Base
         public string FieldName { get; }
 
         public List<string> FieldError { get; }
+
+        public static explicit operator FieldErrorItem(List<string> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ServiceResult
