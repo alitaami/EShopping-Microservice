@@ -1,17 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
+using NLog;
+using NLog.Web;
+using Order.Api.Extensions;
+using Order.Infrastructure.Data;
+using WebFramework.Configuration;
 
-// Add services to the container.
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
-builder.Services.AddControllers();
+try
+{
+    WebApplication
+        .CreateBuilder(args)
+        .ConfigureServices()
+        .Build()
+        .Configure() 
+        .MigrateDatabase<OrderContext>((context, services) =>
+         {
+             var logger = services.GetService<ILogger<OrderContextSeed>>();
+             OrderContextSeed.SeedAsync(context, logger).Wait();
+         })
+        .Run();
+}
+catch (Exception ex)
+{
+    logger.Error(ex);
 
-var app = builder.Build();
+    throw;
+}
 
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

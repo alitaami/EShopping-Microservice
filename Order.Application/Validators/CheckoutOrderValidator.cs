@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Order.Application.Validators
-{ 
+{
     public class CheckoutOrderValidator : AbstractValidator<CheckoutOrderViewModel>
     {
         public CheckoutOrderValidator()
@@ -37,3 +37,4 @@ namespace Order.Application.Validators
                 .WithMessage("{LastName} is required");
         }
     }
+}
