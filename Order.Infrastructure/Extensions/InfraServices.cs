@@ -16,7 +16,7 @@ namespace Order.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfraServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<OrderContext>(options => options.UseSqlServer(configuration.GetConnectionString("OrderConnectionString")))
+            services.AddDbContext<OrderContext>(options => options.UseSqlServer(configuration.GetConnectionString("DatabaseSettings:ConnectionString")))
                 .AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
                 .AddScoped<IOrderRepository, OrderRepository>();
 
