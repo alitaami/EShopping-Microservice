@@ -1,20 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Order.Infrastructure.Data
 {
     public class OrderContextFactory : IDesignTimeDbContextFactory<OrderContext>
     {
+        private readonly IConfiguration _configuration;
+
+        public OrderContextFactory(IConfiguration configuration)
+        {
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
+
         public OrderContext CreateDbContext(string[] args)
         {
-           var optionBuilder = new DbContextOptionsBuilder<OrderContext>();
-            optionBuilder.UseSqlServer("Data Source = OrderDb");
-            return new OrderContext(optionBuilder.Options);
+            // Get the connection string from IConfiguration
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            var optionsBuilder = new DbContextOptionsBuilder<OrderContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+
+            return new OrderContext(optionsBuilder.Options);
         }
     }
 }

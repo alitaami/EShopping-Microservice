@@ -85,7 +85,7 @@ namespace WebFramework.Configuration
         private static void AddHealthChecks(WebApplicationBuilder builder)
         {
             builder.Services.AddHealthChecks()
-                .AddSqlServer(builder.Configuration["DatabaseSettings:ConnectionString"], name: "SqlServer Health Check");
+                .AddSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"], name: "SqlServer Health Check");
         }
 
 
@@ -278,7 +278,7 @@ namespace WebFramework.Configuration
             // Register other application services.
             builder.Services.AddApplicationServices();
             builder.Services.AddInfraServices(builder.Configuration);
-             
+
             // Configure IISServerOptions if needed.
             builder.Services.Configure<IISServerOptions>(options =>
             {

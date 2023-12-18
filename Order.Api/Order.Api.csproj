@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>0fa08e18-ffa7-46cb-a8ff-94b2296cc95e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>MyApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

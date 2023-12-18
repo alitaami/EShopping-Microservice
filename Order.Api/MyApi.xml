@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Order.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Catalog.Api.Controllers.OrderApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Catalog.Api.Controllers.OrderApiController.GetOrderByUsername(System.String)">
+            <summary>
+             Get the product by its Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -46,6 +46,19 @@ services:
     networks:
       - eshopping-external-network
 
+  ordering-api:
+    build:
+      context: .
+    image: ordering-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_URLS=http://*:9003
+      - "ConnectionStrings__DefaultConnection=Server=orderdb;Database=OrderDb;User Id=admin;Password=Ali1234567"
+    depends_on:
+      - orderdb 
+    ports:
+      - "5003:80"
+    
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
@@ -81,6 +94,16 @@ services:
     networks:
       - eshopping-external-network
 
+  orderdb:
+    container_name: orderdb
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "Ali1234567"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1433:1433"
+       
   discountdb:
     image: postgres:latest
     container_name: discountdb
