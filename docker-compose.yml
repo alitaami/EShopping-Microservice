@@ -52,13 +52,14 @@ services:
     image: ordering-api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-#      - ASPNETCORE_URLS=http://*:9003
-      - "ConnectionStrings__DefaultConnection=Server=orderdb;Database=OrderDb;User Id=admin;Password=Ali1234567"
-    depends_on:
-      - orderdb 
+      - "ConnectionStrings__DefaultConnection=Server=orderdb;Database=OrderDb;User Id=sa;Password=Ali1234567;TrustServerCertificate=true;"
     ports:
       - "5003:80"
-    
+    depends_on:
+      - orderdb
+    networks:
+      - eshopping-external-network
+       
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
@@ -93,17 +94,19 @@ services:
     restart: always
     networks:
       - eshopping-external-network
-
+       
   orderdb:
     container_name: orderdb
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: "Ali1234567"
+      MSSQL_SA_PASSWORD: "Ali1234567"
       ACCEPT_EULA: "Y"
     restart: always
     ports:
       - "1433:1433"
-       
+    networks:
+      - eshopping-external-network
+
   discountdb:
     image: postgres:latest
     container_name: discountdb
@@ -138,8 +141,7 @@ networks:
     external: true
 
 volumes:
-  mongo-data:
-  redis-data:
+  mongo-data: {}
   portainer_data: {}
-  postgres_data:
-  pgadmin_data:
+  postgres_data: {}
+  pgadmin_data: {}

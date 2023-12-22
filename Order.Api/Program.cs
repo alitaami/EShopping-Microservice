@@ -1,7 +1,7 @@
 using NLog;
 using NLog.Web;
-using Order.Api.Extensions;
 using Order.Infrastructure.Data;
+using Ordering.API.Extensions;
 using WebFramework.Configuration;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -14,10 +14,8 @@ try
         .Build()
         .Configure()
         .MigrateDatabase<OrderContext>((context, services) =>
-        {
-            var logger = services.GetService<ILogger<OrderContextSeed>>();
-            OrderContextSeed.SeedAsync(context, logger).Wait();
-        })
+       { 
+       })
         .RunAsync();
 }
 catch (AggregateException ex)

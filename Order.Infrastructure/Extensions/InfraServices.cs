@@ -16,8 +16,25 @@ namespace Order.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfraServices(this IServiceCollection services, IConfiguration configuration)
         {
+            // Additional code...
+
             services.AddDbContext<OrderContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(OrderContext).Assembly.GetName().Name);
+
+                    //Configuring Connection Resiliency:
+                    sqlOptions.
+                        EnableRetryOnFailure(maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null);
+                });
+                 
+            });
+
+            services
                 .AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
                 .AddScoped<IOrderRepository, OrderRepository>();
 

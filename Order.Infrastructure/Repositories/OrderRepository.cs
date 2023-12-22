@@ -2,6 +2,7 @@
 using EstateAgentApi.Services.Base;
 using Microsoft.Extensions.Logging;
 using Order.Common.Resources;
+using Order.Core.Entities;
 using Order.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Order.Infrastructure.Repositories
 {
     public class OrderRepository : ServiceBase<OrderRepository>, IOrderRepository
     {
-        private IAsyncRepository<Order.Core.Entities.Order> _db;
+        private IAsyncRepository<Core.Entities.Order> _db;
         public OrderRepository(IAsyncRepository<Core.Entities.Order> db, ILogger<OrderRepository> logger) : base(logger)
         {
             _db = db;

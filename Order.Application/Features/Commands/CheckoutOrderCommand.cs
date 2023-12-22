@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Order.Application.Responses;
 using Order.Application.ViewModels;
 using Order.Common.Resources;
+using Order.Core.Entities;
 using Order.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -26,9 +27,9 @@ namespace Order.Application.Features.Commands
 
         public class CheckoutOrderCommandHandler : ServiceBase<CheckoutOrderCommandHandler>, IRequestHandler<CheckoutOrderCommand, ServiceResult>
         {
-            private readonly IAsyncRepository<Order.Core.Entities.Order> _order;
+            private readonly IAsyncRepository<Core.Entities.Order> _order;
             private readonly IMapper _mapper;
-            public CheckoutOrderCommandHandler(IMapper mapper, ILogger<CheckoutOrderCommandHandler> logger, IAsyncRepository<Order.Core.Entities.Order> order) : base(logger)
+            public CheckoutOrderCommandHandler(IMapper mapper, ILogger<CheckoutOrderCommandHandler> logger, IAsyncRepository<Core.Entities.Order> order) : base(logger)
             {
                 _mapper = mapper;
                 _order = order;
@@ -37,7 +38,7 @@ namespace Order.Application.Features.Commands
             {
                 try
                 {
-                    var data = _mapper.Map<Order.Core.Entities.Order>(request.model);
+                    var data = _mapper.Map<Core.Entities.Order>(request.model);
 
                     var operation = await _order.AddAsync(data);
 

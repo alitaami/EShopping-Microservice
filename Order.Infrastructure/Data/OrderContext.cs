@@ -1,21 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Core.Common;
-using Order.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Order.Core.Entities; // Keep this using statement to reference the Order entity
 
 namespace Order.Infrastructure.Data
 {
-    public class OrderContext :DbContext
+    public class OrderContext : DbContext
     {
-        public OrderContext(DbContextOptions<OrderContext> options) :base(options)  
+        public OrderContext(DbContextOptions<OrderContext> options) : base(options)
         {
 
         }
-        public DbSet<Order.Core.Entities.Order> Orders { get; set; }
+
+        public DbSet<Core.Entities.Order> Orders { get; set; } // Use DbSet<Order> directly
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
@@ -24,13 +20,13 @@ namespace Order.Infrastructure.Data
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedDate =DateTime.Now;
-                        entry.Entity.CreatedBy = "Ali"; //TODO: will be replaced by identity server
+                        entry.Entity.CreatedDate = DateTime.Now;
+                        entry.Entity.CreatedBy = "Ali"; // TODO: will be replaced by identity server
                         break;
-                    
+
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedDate =DateTime.Now;
-                        entry.Entity.LastModifiedBy = "Ali"; //TODO: will be replaced by identity server
+                        entry.Entity.LastModifiedDate = DateTime.Now;
+                        entry.Entity.LastModifiedBy = "Ali"; // TODO: will be replaced by identity server
                         break;
                 }
             }

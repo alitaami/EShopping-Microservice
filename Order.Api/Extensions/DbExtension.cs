@@ -1,8 +1,11 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Polly;
+using System;
+using Order.Infrastructure.Data;
 
-namespace Order.Api.Extensions
+namespace Ordering.API.Extensions
 {
     public static class DbExtension
     {
@@ -13,37 +16,25 @@ namespace Order.Api.Extensions
             {
                 var services = scope.ServiceProvider;
                 var logger = services.GetRequiredService<ILogger<TContext>>();
-                var context = services.GetService<TContext>();
+                var context = services.GetRequiredService<TContext>();
 
                 try
                 {
                     logger.LogInformation($"Started Db Migration: {typeof(TContext).Name}");
-                    //retry strategy
-                    var retry = Policy.Handle<SqlException>()
-                        .WaitAndRetry(
-                            retryCount: 5,
-                            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                            onRetry: (exception, span, cont) =>
-                            {
-                                logger.LogError("Retrying because of {exception} {retry}", exception, span);
-                            });
-                    retry.Execute(() => CallSeeder(seeder, context, services));
-                    logger.LogInformation($"Migration Completed: {typeof(TContext).Name}");
+
+                    // Drop the table if it exists
+                    // Create and Seed data using raw SQL query for orders
+                    context.Database.ExecuteSqlRaw(OrderDataSeeder.SeedQuery(typeof(TContext).Name));
+                     
+                    logger.LogInformation($"Migration and Data Seeding has Completed: {typeof(TContext).Name}");
                 }
-                catch (SqlException e)
+                catch (Exception e)
                 {
                     logger.LogError(e, $"An error occurred while migrating db: {typeof(TContext).Name}");
                 }
             }
 
             return host;
-        }
-
-        private static void CallSeeder<TContext>(Action<TContext, IServiceProvider> seeder, TContext context,
-            IServiceProvider services) where TContext : DbContext
-        {
-            context.Database.Migrate();
-            seeder(context, services);
         }
     }
 }

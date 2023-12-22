@@ -16,9 +16,9 @@ namespace Catalog.Api.Controllers
             if (serviceResult.Result.HttpStatusCode == (int)HttpStatusCode.OK)
             {
                 if (serviceResult.Data == null)
-                    return Ok();
+                    return Ok(serviceResult);
                 else
-                    return Ok(serviceResult.Data);
+                    return Ok(serviceResult);
             }
 
             else if (serviceResult.Result.HttpStatusCode == (int)HttpStatusCode.BadRequest)

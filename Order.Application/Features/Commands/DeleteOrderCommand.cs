@@ -4,6 +4,7 @@ using EstateAgentApi.Services.Base;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Order.Common.Resources;
+using Order.Core.Entities;
 using Order.Core.Repositories;
 using System;
 using System.Collections.Generic;

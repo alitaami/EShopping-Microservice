@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Order.Application.Responses;
 using Order.Application.ViewModels;
 using Order.Common.Resources;
+using Order.Core.Entities;
 using Order.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -26,9 +27,9 @@ namespace Order.Application.Features.Commands
 
         public class UpdateOrderCommandHandler : ServiceBase<UpdateOrderCommandHandler>, IRequestHandler<UpdateOrderCommand, ServiceResult>
         {
-            private readonly IAsyncRepository<Order.Core.Entities.Order> _order;
+            private readonly IAsyncRepository<Core.Entities.Order> _order;
             private readonly IMapper _mapper;
-            public UpdateOrderCommandHandler(IMapper mapper, ILogger<UpdateOrderCommandHandler> logger, IAsyncRepository<Order.Core.Entities.Order> order) : base(logger)
+            public UpdateOrderCommandHandler(IMapper mapper, ILogger<UpdateOrderCommandHandler> logger, IAsyncRepository<Core.Entities.Order> order) : base(logger)
             {
                 _mapper = mapper;
                 _order = order;
@@ -42,7 +43,7 @@ namespace Order.Application.Features.Commands
                     if(data is null)
                         return BadRequest(ErrorCodeEnum.BadRequest, Resource.NotFound , null);
 
-                    var res = _mapper.Map<Order.Core.Entities.Order>(request.model);
+                    var res = _mapper.Map<Core.Entities.Order>(request.model);
                    
                     await _order.UpdateAsync(res);
 
