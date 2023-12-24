@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventBus.Message\EventBus.Message.csproj" />
     <ProjectReference Include="..\Order.Webframework\Order.Webframework.csproj" />
   </ItemGroup>
 

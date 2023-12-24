@@ -64,13 +64,13 @@ namespace Basket.Api.Controllers
         {
             try
             {
-                foreach (var item in model.Items)
-                {
-                    var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+                //foreach (var item in model.Items)
+                //{
+                //    var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
 
-                    if (coupon.Amount != 0)
-                        item.Price -= coupon.Amount;
-                }
+                //    if (coupon.Amount != 0)
+                //        item.Price -= coupon.Amount;
+                //}
                 var result = await _sender.Send(new CreateShoppingCartCommand(model.UserName, model.Items));
 
                 return APIResponse(result);
@@ -117,12 +117,12 @@ namespace Basket.Api.Controllers
                 if (data.Data is null)
                     return BadRequest();
 
-                var basket = _mapper.Map<ShoppingCartDto>(data);
+                var basket = _mapper.Map<ShoppingCartDto>(data.Data);
                 
                 var eventMessage = _mapper.Map<BasketChekoutEvent>(model);
                 eventMessage.TotalPrice = basket.TotalPrice;
 
-                _publishEndpoint.Publish(eventMessage);
+               await _publishEndpoint.Publish(eventMessage);
 
                 //Delete the Basket
                 await _sender.Send(new DeleteShoppingCartCommand(model.UserName));

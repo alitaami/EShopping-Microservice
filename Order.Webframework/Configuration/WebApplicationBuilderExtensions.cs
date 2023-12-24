@@ -16,6 +16,9 @@ using WebFramework.Configuration.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Application;
 using Order.Infrastructure.Extensions;
+using MassTransit;
+using Order.Webframework.Configuration.EventBusConsumer;
+using EventBus.Message.Common;
 
 namespace WebFramework.Configuration
 {
@@ -278,7 +281,26 @@ namespace WebFramework.Configuration
             // Register other application services.
             builder.Services.AddApplicationServices();
             builder.Services.AddInfraServices(builder.Configuration);
+            builder.Services.AddScoped<BasketOrderingConsumer>();
 
+            builder.Services.
+              AddMassTransit(config => {
+
+                  // Mark this as consumer 
+                  config.AddConsumer<BasketOrderingConsumer>();
+                  config.UsingRabbitMq((ctx, cfg) =>
+                  {
+                      cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+                      //Provide the queue name with consumer settings
+                      cfg.ReceiveEndpoint(EventBusConstant.BasketCheckoutQueue
+                          , c =>
+                          {
+                              c.ConfigureConsumer<BasketOrderingConsumer>(ctx);
+                          });
+                  });
+              });
+            builder.Services.AddMassTransitHostedService();
+            
             // Configure IISServerOptions if needed.
             builder.Services.Configure<IISServerOptions>(options =>
             {

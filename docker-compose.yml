@@ -27,8 +27,10 @@ services:
     environment:
       - CacheSettings__ConnectionString=redis:6379,password=Ali1234567,abortConnect=false
       - GrpcSettings__DiscountUrl=http://discount-api:5002
-    #depends_on:
+      - EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672
+    depends_on:
       - redis
+      - rabbitmq
     networks:
       - eshopping-external-network
 
@@ -53,10 +55,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings__DefaultConnection=Server=orderdb;Database=OrderDb;User Id=sa;Password=Ali1234567;TrustServerCertificate=true;"
+      - EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672
     ports:
       - "5003:80"
     depends_on:
       - orderdb
+      - rabbitmq
     networks:
       - eshopping-external-network
        
@@ -119,6 +123,21 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - eshopping-external-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+     test: ["CMD", "rabbitmqctl", "status"]
+     interval: 10s
+     timeout: 5s
+     retries: 3
     networks:
       - eshopping-external-network
 

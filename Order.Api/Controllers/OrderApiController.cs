@@ -72,25 +72,25 @@ namespace Catalog.Api.Controllers
             }
         }
 
-        [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> CheckoutOrder([FromBody] CheckoutOrderViewModel model)
-        {
-            try
-            {
-                var res = await _sender.Send(new CheckoutOrderCommand(model));
+        //[HttpPost]
+        //[Consumes(MediaTypeNames.Application.Json)]
+        //[ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
+        //[ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
+        //public async Task<IActionResult> CheckoutOrder([FromBody] CheckoutOrderViewModel model)
+        //{
+        //    try
+        //    {
+        //        var res = await _sender.Send(new CheckoutOrderCommand(model));
 
-                return APIResponse(res);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, null, null);
-                return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain);
-            }
-        }
+        //        return APIResponse(res);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, null, null);
+        //        return InternalServerError(ErrorCodeEnum.InternalError, Resource.GeneralErrorTryAgain);
+        //    }
+        //}
 
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
