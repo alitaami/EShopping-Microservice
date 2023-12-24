@@ -22,6 +22,7 @@ using Application;
 using Microsoft.Extensions.Configuration;
 using Basket.Application.GrpcService;
 using Discount.Grpc.Protos;
+using MassTransit;
 
 namespace WebFramework.Configuration
 {
@@ -295,6 +296,16 @@ namespace WebFramework.Configuration
             // Register other application services.
             builder.Services.AddApplicationServices();
 
+            builder.Services.
+                AddMassTransit(config => {
+                    config.UsingRabbitMq((ct, cfg) =>
+                    {
+                        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+                    });
+                });
+
+            builder.Services.AddMassTransitHostedService();
+           
             // Configure IISServerOptions if needed.
             builder.Services.Configure<IISServerOptions>(options =>
             {
