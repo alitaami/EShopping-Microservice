@@ -63,7 +63,24 @@ services:
       - rabbitmq
     networks:
       - eshopping-external-network
-       
+     
+  ocelotapigw:
+    build:
+      context: .
+    image: ocelot-api-gateway-image:latest
+    container_name: ocelotapigw
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development      
+    depends_on:
+#      - identityserver
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
+    ports:
+      - "5004:80" 
+        
+
   portainer:
     image: portainer/portainer-ce
     container_name: portainer

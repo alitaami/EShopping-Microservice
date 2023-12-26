@@ -40,7 +40,7 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetGetBasketByUsername(string username)
+        public async Task<IActionResult> GetBasketByUsername(string username)
         {
             try
             {
@@ -64,12 +64,12 @@ namespace Basket.Api.Controllers
         {
             try
             {
-                //foreach (var item in model.Items)
+                //foreach (var item in model.items)
                 //{
-                //    var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+                //    var coupon = await _discountgrpcservice.getdiscount(item.productname);
 
-                //    if (coupon.Amount != 0)
-                //        item.Price -= coupon.Amount;
+                //    if (coupon.amount != 0)
+                //        item.price -= coupon.amount;
                 //}
                 var result = await _sender.Send(new CreateShoppingCartCommand(model.UserName, model.Items));
 
