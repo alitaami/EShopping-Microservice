@@ -4,6 +4,7 @@ services:
   catalog-api:
     build:
       context: . 
+      dockerfile:  Catalog.Api/Dockerfile
     image: catalog-api:latest
     ports:
       - "5000:80"
@@ -21,6 +22,7 @@ services:
   basket-api:
     build:
       context: .
+      dockerfile:  Basket.Api/Dockerfile
     image: basket-api:latest
     ports:
       - "5001:80"
@@ -37,6 +39,7 @@ services:
   discount-api:
     build:
       context: .
+      dockerfile:  Discount.Api/Dockerfile
     image: discount-api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -51,6 +54,7 @@ services:
   ordering-api:
     build:
       context: .
+      dockerfile:  Order.Api/Dockerfile
     image: ordering-api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -67,19 +71,20 @@ services:
   ocelotapigw:
     build:
       context: .
+      dockerfile:  Ocelot.ApiGateway/Dockerfile
     image: ocelot-api-gateway-image:latest
-    container_name: ocelotapigw
     environment:
       - ASPNETCORE_ENVIRONMENT=Development      
     depends_on:
 #      - identityserver
-      - catalog.api
-      - basket.api
-      - discount.api
-      - ordering.api
+      - catalog-api
+      - basket-api
+      - discount-api
+      - ordering-api
     ports:
       - "5004:80" 
-        
+    networks:
+      - eshopping-external-network
 
   portainer:
     image: portainer/portainer-ce
