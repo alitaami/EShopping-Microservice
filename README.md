@@ -31,3 +31,6 @@ and if you wanna test the project; first you should clone it to your pc, then yo
 the project`s path :
 
 <h6>docker-compose up -d --build</h6>
+
+and if you wanna check the containers and their logs, you can have an access to them by using Portainer on : 
+<h6>http://localhost:9000</h6>
