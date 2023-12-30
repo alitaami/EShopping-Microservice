@@ -27,7 +27,7 @@ Key Highlights:
  
  --
 
-and if you wanna test the project;first you should clone it in your pc, then you can run this command in
+and if you wanna test the project; first you should clone it to your pc, then you can run this command in
 the project`s path :
 
 <h6>docker-compose up -d --build</h6>
