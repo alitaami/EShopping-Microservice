@@ -1,6 +1,6 @@
 Hello Developers,
 
-Embark on a journey through our "Microservices Learning Series" – an all-encompassing course tailored for developers keen on mastering the art of building scalable, efficient, and resilient Microservices using the .NET Core platform. This comprehensive guide covers a myriad of technologies, including Docker, Identity Server 4, Rabbit MQ , GRPC, SQL Server, MongoDB, PostGreSQL, Redis, Ocelot.
+I have started a journey through "Microservices Learning Series" – an all-encompassing course tailored for developers keen on mastering the art of building scalable, efficient, and resilient Microservices using the .NET Core platform. This comprehensive guide covers a myriad of technologies, including Docker, Identity Server 4, Rabbit MQ , GRPC, SQL Server, MongoDB, PostGreSQL, Redis, Ocelot.
 
 Course link :  https://www.udemy.com/course/creating-net-core-microservices-using-clean-architecture/
 
