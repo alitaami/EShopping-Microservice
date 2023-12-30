@@ -20,7 +20,7 @@ Key Highlights:
 
     API Gateway Management: Utilize Ocelo to manage your Microservices API gateway. 
 
-    --
+ 
 
     Project`s Architecture : 
  <img width="1040" alt="221078010-61bd0cc8-af27-473a-9e96-9199668cd9d7" src="https://github.com/alitaami/EShopping-Microservice/assets/116227297/af0454ae-d8a4-46a4-a355-8e78eabac64e">
