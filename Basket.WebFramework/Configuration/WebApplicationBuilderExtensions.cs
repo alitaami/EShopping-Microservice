@@ -23,6 +23,9 @@ using Microsoft.Extensions.Configuration;
 using Basket.Application.GrpcService;
 using Discount.Grpc.Protos;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebFramework.Configuration
 {
@@ -295,7 +298,21 @@ namespace WebFramework.Configuration
 
             // Register other application services.
             builder.Services.AddApplicationServices();
+          
+            var userPolicy = new AuthorizationPolicyBuilder()
+               .RequireAuthenticatedUser()
+               .Build();
 
+            builder.Services.AddControllers(config => config.Filters.Add(new AuthorizeFilter(userPolicy)));
+
+            //Authentication
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5009";
+                    options.Audience = "Basket";
+                });
+             
             builder.Services.
                 AddMassTransit(config => {
                     config.UsingRabbitMq((ct, cfg) =>

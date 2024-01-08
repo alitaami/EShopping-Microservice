@@ -20,6 +20,7 @@ namespace Eshopping.Identity
             new ApiScope[]
             {
                 new ApiScope("CatalogApi"),
+                new ApiScope("BasketApi"),
             };
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
@@ -28,6 +29,10 @@ namespace Eshopping.Identity
                 new ApiResource(/* Audience */ "Catalog", "Catalog-Api")
                 {
                     Scopes = {"CatalogApi" }
+                },
+                new ApiResource(/* Audience */ "Basket", "Basket-Api")
+                {
+                    Scopes = { "BasketApi" }
                 }
             };
         public static IEnumerable<Client> Clients =>
@@ -35,12 +40,11 @@ namespace Eshopping.Identity
             {
                 new Client
                 {
-                    ClientName = "Catalog api client",
-                    ClientId = "ClientApiClient",
+                    ClientName = "api client",
+                    ClientId = "ApiClient",
                     ClientSecrets = {new Secret("1db79381-2d1a-4b3d-b88c-e7116fa7aaa3".Sha256()) },
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = {"CatalogApi" }
-
+                    AllowedScopes = {"CatalogApi", "BasketApi" }
                 }
             };
     }
