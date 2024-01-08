@@ -20,6 +20,9 @@ using WebFramework.Configuration.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Application;
 using Catalog.Core.Entities.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebFramework.Configuration
 {
@@ -295,6 +298,20 @@ namespace WebFramework.Configuration
 
             // Register other application services.
             builder.Services.AddApplicationServices();
+
+            var userPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+       
+            builder.Services.AddControllers(config => config.Filters.Add(new AuthorizeFilter(userPolicy)));
+            
+            //Authentication
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5009";
+                    options.Audience = "Catalog";
+                });
 
             // Configure IISServerOptions if needed.
             builder.Services.Configure<IISServerOptions>(options =>

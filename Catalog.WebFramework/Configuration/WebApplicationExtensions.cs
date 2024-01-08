@@ -25,9 +25,9 @@ namespace WebFramework.Configuration
                 app.UseHttpsRedirection();
                 app.UseRouting();
                 app.UseCors();
-                //app.UseAuthentication();
+                app.UseAuthentication();
                 app.UseStaticFiles();
-                //app.UseAuthorization();
+                app.UseAuthorization();
 
 
                 // Endpoints mapping comes after Authentication and Authorization.
