@@ -17,7 +17,6 @@ namespace Catalog.Api.Controllers
     /// 
     /// </summary>
     [ApiVersion("1")]
-    [Authorize]
     public class CatalogApiController : APIControllerBase
     {
         private readonly ILogger<CatalogApiController> _logger;
